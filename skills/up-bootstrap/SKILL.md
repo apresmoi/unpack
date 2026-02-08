@@ -32,6 +32,7 @@ If the conversation wasn't started with the research guide, extract what you can
    - **.gitignore**: Append stack-appropriate entries based on what you detect in the conversation (TypeScript → node_modules/dist/.env, Python → __pycache__/.venv, etc.). Always include: `snapshot.md`, `conversation.md`, `.DS_Store`, `Thumbs.db`, `*.swp`.
    - **Standards**: Copy universal standards (`standards/universal/file-length.md`, `standards/organization/folder-structure.md`, `standards/organization/agent-friendly.md`) to `docs/practices/`. Match and copy stack-specific standards based on what the conversation discusses. Copy deployment standards if applicable.
    - **guide/**: If human docs are enabled, create the directory. If Mintlify is enabled, create a starter `mint.json`.
+   - **Reference code**: If entry path is "from-reference", ask the user where the reference code lives (local path or repo URL). Record it in `guide-config.md` and scan it during spec extraction to ground specs in existing patterns.
    - **AGENTS_STATE**: Set to `BUILD` (done at the end of bootstrap, step 9).
 
 1. **Read the conversation file**.

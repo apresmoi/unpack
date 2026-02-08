@@ -27,12 +27,11 @@ Use AskUserQuestion to gather preferences. Aim for **2 rounds max**. Group quest
 - How do you want to handle coding standards? Use Unpack's (recommended), bring your own, or research best practices.
 
 **Round 2:**
-- If "from reference": where does the reference code live? (local path or repo URL, or "I'll provide it later")
 - How are you going to deploy? AWS Copilot, Docker, GCP, Vercel, Fly.io, Railway, other, or not sure yet.
 - Do you want human-readable docs? No, yes (end-user / technical / full), or decide later.
 - If yes to docs: Mintlify integration? (yes / no)
 
-Skip questions that don't apply (e.g., don't ask about reference path if they chose "from scratch", don't ask about Mintlify if they said no to docs).
+Skip questions that don't apply (e.g., don't ask about Mintlify if they said no to docs). If only 1 question remains, merge it into Round 1 instead of doing a separate round.
 
 ### Step 2: Write configuration
 
@@ -43,7 +42,6 @@ Create `docs/_meta/guide-config.md` — this is the only file that MUST exist fo
 
 ## Project
 - Entry path: <from-scratch/from-reference/existing-project>
-- Reference: <path or URL, if from-reference>
 - License: <mit/apache-2.0/isc/none>
 
 ## Standards
