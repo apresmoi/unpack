@@ -76,7 +76,7 @@ flowchart LR
 
 1. Click **"Use this template"** on GitHub to create your repo
 2. Clone it locally
-3. Run `/up-init` — the wizard asks for your project name, license, stack, and docs preferences. It replaces the template README with yours and loads coding standards
+3. Run `/up-init` — the wizard configures your agent, license, coding standards, deployment, and docs preferences. Stack and libraries are auto-detected later from your conversation
 4. Have a research conversation in ChatGPT (use [prompts/research-guide.md](prompts/research-guide.md))
 5. Save the chat as `conversation.md` at the project root
 6. Run `/up-bootstrap` to decompress into structured docs and phases
@@ -244,7 +244,7 @@ Not all files are generated — it depends on your configured documentation leve
 
 ## Standards library
 
-Unpack ships with 15 coding standards covering common stacks. During `/up-init`, you select which ones apply to your project — they get copied into `docs/practices/`.
+Unpack ships with 15 coding standards covering common stacks. Standards are automatically matched to your stack during `/up-bootstrap` or `/up-adopt` and copied into `docs/practices/`. You can also bring your own or have the agent research best practices.
 
 | Category | Standards |
 |----------|-----------|

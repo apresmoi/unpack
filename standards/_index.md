@@ -1,6 +1,6 @@
 # Standards Library — Index
 
-This is the catalog of all available coding standards and best practices. When initializing a new project (`/up-init`), select the standards that match your stack. They'll be copied into the project's `docs/practices/` folder.
+This is the catalog of all available coding standards and best practices. During `/up-bootstrap` or `/up-adopt`, standards are automatically matched to your stack and copied into the project's `docs/practices/` folder.
 
 ## How to populate
 

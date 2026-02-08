@@ -40,4 +40,4 @@ Skills are authored in `skills/` (the canonical source). During `/up-init`, they
 
 ## Standards library
 
-Coding standards live in `standards/` organized by stack. Use `/up-extract-standards` to populate them from example repos. During `/up-init`, relevant standards are copied into the project's `docs/practices/`.
+Coding standards live in `standards/` organized by stack. Use `/up-extract-standards` to populate them from example repos. Standards are automatically matched and copied into `docs/practices/` during `/up-bootstrap` or `/up-adopt`.

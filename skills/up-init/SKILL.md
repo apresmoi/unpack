@@ -15,31 +15,30 @@ You are running the onboarding wizard for a new Unpack project. This personalize
 
 ### Step 1: Gather project information
 
-Ask the user the following. Keep it conversational and fluid — group questions naturally, don't dump everything at once.
+Ask the user the following. Keep it conversational and concise — only ask what's needed to set up the project. Everything else (project name, description, stack, libraries) will be inferred later from `conversation.md` or the existing codebase.
 
-**Identity:**
-- What is the project name?
-- One-line description of what it does.
-
-**License:**
-- What license? Offer: MIT (recommend as default), Apache 2.0, ISC, or none.
-
-**Contributing guide:**
-- Do you want a CONTRIBUTING.md? (yes / no)
-
-**Stack and standards:**
-- What stack? Show available standards from `standards/_index.md`:
-  - TypeScript — general, React, Next.js, Express API
-  - Python — general (poetry, ruff, mypy, pytest, structlog, pydantic-settings)
-  - Other (no stack-specific standards, still loads universal + organization)
-- If TypeScript selected: which libraries? Prisma, Tailwind, React Query, Zod
-- Infrastructure: AWS Copilot, Docker, or neither
-
-**Entry path:**
-- Greenfield (will bring a research conversation) or existing codebase (adoption)?
-
-**AI coding agent:**
+**Basics** (group these together):
 - Which agent(s) will you use? Claude Code, Codex, or both? (default: auto-detect from current agent)
+- Are you starting from scratch (greenfield — you'll bring a research conversation), or is there already existing code (adoption)?
+- What license? MIT (recommended), Apache 2.0, ISC, or none.
+
+**Coding standards:**
+- Unpack ships standards for common stacks (check `standards/_index.md` for the full list). These will be matched automatically based on the stack detected in your conversation or codebase. The user can choose:
+  - **Use Unpack's standards** (recommended) — matched automatically to their stack
+  - **Bring your own** — describe what you want and we'll write custom standards
+  - **Research best practices** — we'll research current best practices for their stack and generate standards
+- Note: universal standards (file length, folder structure, agent-friendly patterns) are always included regardless of choice.
+
+**Deployment:**
+- How are you going to deploy? Offer these options:
+  - AWS Copilot
+  - Docker / Docker Compose
+  - GCP (Cloud Run, App Engine, GKE)
+  - Vercel
+  - Fly.io
+  - Railway
+  - Other (let them describe)
+  - Not sure yet / decide later
 
 **Human-readable docs:**
 - Do you want human docs? (yes / no / later)
@@ -47,9 +46,11 @@ Ask the user the following. Keep it conversational and fluid — group questions
   - **End-user**: how to use the product (guides, tutorials)
   - **Technical**: architecture, API reference, deployment, configuration
   - **Full**: both end-user and technical, plus contributing and decisions
-- If yes: Mintlify integration? (yes / no)
+- Mintlify integration? (yes / no)
 
 ### Step 2: Replace project files
+
+Use the project name from the conversation or codebase. If not yet known (greenfield before conversation), use the directory name as a placeholder.
 
 **Replace README.md** with a project-specific one. Use this structure:
 
@@ -80,38 +81,11 @@ This project uses [Unpack](https://github.com/apresmoi/unpack) for documentation
 
 - Agent docs: [`docs/`](docs/) — specs, phases, decisions, and memory
 - Human docs: [`guide/`](guide/) — readable docs for developers and users
-
-## License
-
-[<License name>](LICENSE)
 ```
-
-If the user chose no license, omit the License section.
 
 **Update LICENSE** with the chosen license text. Use the current year. Ask the user for the copyright holder name (default: "<Project Name> Contributors"). If no license chosen, delete the LICENSE file.
 
-**Handle CONTRIBUTING.md:**
-- If yes: replace with a project-specific one:
-
-```markdown
-# Contributing to <Project Name>
-
-## Getting started
-
-<!-- TODO: add setup instructions after first build phases -->
-
-## Development workflow
-
-This project uses [Unpack](https://github.com/apresmoi/unpack) for documentation-driven development. See [`docs/`](docs/) for specs and phase plans.
-
-## Submitting changes
-
-1. Create a branch
-2. Make your changes
-3. Submit a pull request
-```
-
-- If no: delete CONTRIBUTING.md.
+**Delete CONTRIBUTING.md** — this is a template file. The user can add their own later.
 
 **Create or extend .gitignore** with stack-appropriate entries:
 
@@ -158,10 +132,15 @@ If a `.gitignore` already exists, append missing entries rather than overwriting
 ### Step 3: Load standards
 
 - **Always include**: `universal/file-length.md`, `organization/folder-structure.md`, `organization/agent-friendly.md`
-- Copy selected framework standards (e.g., `typescript/general.md`, `typescript/react.md`)
-- Copy selected library standards (e.g., `typescript/libraries/prisma.md`)
-- Copy selected infrastructure standards (e.g., `infra/docker.md`)
 - Destination: `docs/practices/` — rename to drop subfolder prefix (e.g., `standards/typescript/libraries/prisma.md` → `docs/practices/prisma.md`)
+
+Based on the user's standards choice in Step 1:
+
+- **Use Unpack's standards**: Stack and library detection happens later (during `/up-bootstrap` or `/up-adopt`), which will match and copy the relevant standards from `standards/`. For now, only copy the universal standards.
+- **Bring your own**: Ask the user to describe their standards. Write them as markdown files in `docs/practices/`.
+- **Research best practices**: Note this preference in `docs/_meta/guide-config.md`. During `/up-bootstrap` or `/up-adopt`, the agent will research current best practices for the detected stack and generate standards.
+
+Copy any deployment-related standards based on the infrastructure choice (e.g., `infra/docker.md`, `infra/aws-copilot.md`). If the user chose a platform we don't have standards for, note it for later research.
 
 ### Step 4: Write configuration
 
@@ -170,12 +149,17 @@ If a `.gitignore` already exists, append missing entries rather than overwriting
 ```markdown
 # Guide Configuration
 
+## Standards
+- Approach: <unpack/custom/research>
+- Deployment: <aws-copilot/docker/gcp/vercel/fly/railway/other/undecided>
+
 ## Human docs
 - Enabled: <yes/no/later>
 - Level: <end-user/technical/full>
 - Mintlify: <yes/no>
 
 ## Notes
+- `/up-bootstrap` and `/up-adopt` read this file to determine standards loading
 - `/up-document` reads this file to determine what to generate
 - Change these settings anytime by editing this file
 ```
