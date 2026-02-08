@@ -82,10 +82,10 @@ flowchart LR
 6. Run `/up-bootstrap` to decompress into structured docs and phases
 7. Run `/up-next` to start building
 
-### Existing project (adopt)
+### Existing project
 
 1. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `skills/`, `docs/`, `prompts/`, `standards/`
-2. Run `/up-adopt` — the agent scans your codebase, generates discovery docs, and creates alignment phases
+2. Run `/up-adopt` — the agent scans your project, generates discovery docs, and creates alignment phases
 3. Run `/up-next` to start improving
 
 ### Upgrading Unpack
@@ -114,7 +114,7 @@ Check the version in `AGENTS.md` (`UNPACK_VERSION` comment) to see what you're r
 |-------|-------------|
 | `/up-init` | Setting up a new project — stack, standards, and docs preferences |
 | `/up-bootstrap` | Processing your first conversation into docs, specs, and phases |
-| `/up-adopt` | Bringing Unpack into an existing codebase |
+| `/up-adopt` | Bringing Unpack into an existing project |
 | `/up-status` | Checking project progress, blockers, and the next phase |
 | `/up-next` | Executing the next phase |
 | `/up-snapshot` | Exporting project state for external research |
@@ -205,7 +205,7 @@ docs/
   index.md                  # Navigation hub + phase status table
   _meta/
     workflow.md             # Operating principles
-    adoption-rules.md       # Rules for adopting existing repos
+    adoption-rules.md       # Rules for adopting existing projects
     unpack-map.md           # How conversation topics map to spec files
     project-memory.md       # Decisions log (append-only)
     guide-config.md         # Human docs preferences (level, Mintlify)
@@ -221,7 +221,7 @@ docs/
     08-security-and-privacy.md
   phases/                   # Execution plan with dependencies
   decisions/                # Architecture Decision Records (ADRs)
-  discovery/                # Facts derived from code scanning (adoption)
+  discovery/                # Facts derived from code scanning (existing projects)
   practices/                # Coding standards loaded for this project
 ```
 

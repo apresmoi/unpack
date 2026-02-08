@@ -13,14 +13,14 @@ unpack_version: "1.0.0"
 
 ## Intent
 
-Set up the documentation system and create a tailored phase plan. For greenfield projects this means processing a conversation into structured docs; for existing repos this means scanning the codebase and generating discovery docs + alignment phases.
+Set up the documentation system and create a tailored phase plan. For new projects this means processing a conversation into structured docs; for existing projects this means scanning the code and generating discovery docs + alignment phases.
 
 ## Scope (in / out)
 
 ### In scope
 
 - Create/verify docs scaffold
-- Write discovery docs from repo scan (adoption) OR extract specs from conversation (greenfield)
+- Write discovery docs from repo scan (existing project) OR extract specs from conversation (new project)
 - Seed specs with known facts + "needs confirmation" markers
 - Create phases (phase-1+) with dependencies, criteria, and test plans
 - Update `docs/index.md`
@@ -45,7 +45,7 @@ Set up the documentation system and create a tailored phase plan. For greenfield
 - [ ] Seed `docs/specs/*` with known facts + open questions
 - [ ] Generate phases (phase-1+) with dependencies + test plans
 - [ ] Update `docs/index.md` with all docs + phases
-- [ ] Archive conversation to `conversations/` (if greenfield bootstrap)
+- [ ] Archive conversation to `conversations/` (if new project bootstrap)
 - [ ] Update `AGENTS.md` state marker to BUILD
 
 ## Completion criteria

@@ -1,11 +1,11 @@
 ---
 name: up-adopt
-description: Scan an existing codebase and create docs + alignment phases
+description: Scan an existing project and create docs + alignment phases
 ---
 
-# Adopt an existing repository into the Unpack system
+# Adopt an existing project into the Unpack system
 
-You are scanning an existing codebase and creating documentation + alignment phases to bring it to a healthy state.
+You are scanning an existing project and creating documentation + alignment phases to bring it to a healthy state.
 
 ## Input
 

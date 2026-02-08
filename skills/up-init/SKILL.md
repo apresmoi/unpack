@@ -15,15 +15,18 @@ You are running the onboarding wizard for a new Unpack project. This personalize
 
 ### Step 1: Gather project information
 
-Ask the user the following. Keep it conversational and concise — only ask what's needed to set up the project. Everything else (project name, description, stack, libraries) will be inferred later from `conversation.md` or the existing codebase.
+Ask the user the following. Keep it conversational and concise — only ask what's needed to set up the project. Everything else (project name, description, stack, libraries) will be inferred later from `conversation.md` or the existing project.
 
 **Basics** (group these together):
 - Which agent(s) will you use? Claude Code, Codex, or both? (default: auto-detect from current agent)
-- Are you starting from scratch (greenfield — you'll bring a research conversation), or is there already existing code (adoption)?
+- What's your starting point?
+  - **From scratch** — no existing code, you'll bring a research conversation
+  - **From reference** — starting fresh, but there's existing code to draw from (ask where it lives — local path or repo URL)
+  - **Existing project** — there's already a working project to document and improve
 - What license? MIT (recommended), Apache 2.0, ISC, or none.
 
 **Coding standards:**
-- Unpack ships standards for common stacks (check `standards/_index.md` for the full list). These will be matched automatically based on the stack detected in your conversation or codebase. The user can choose:
+- Unpack ships standards for common stacks (check `standards/_index.md` for the full list). These will be matched automatically based on the stack detected in your conversation or project. The user can choose:
   - **Use Unpack's standards** (recommended) — matched automatically to their stack
   - **Bring your own** — describe what you want and we'll write custom standards
   - **Research best practices** — we'll research current best practices for their stack and generate standards
@@ -50,7 +53,7 @@ Ask the user the following. Keep it conversational and concise — only ask what
 
 ### Step 2: Replace project files
 
-Use the project name from the conversation or codebase. If not yet known (greenfield before conversation), use the directory name as a placeholder.
+Use the project name from the conversation or project. If not yet known (starting from scratch, before conversation), use the directory name as a placeholder.
 
 **Replace README.md** with a project-specific one. Use this structure:
 
@@ -149,6 +152,10 @@ Copy any deployment-related standards based on the infrastructure choice (e.g., 
 ```markdown
 # Guide Configuration
 
+## Project
+- Entry path: <from-scratch/from-reference/existing-project>
+- Reference: <path or URL, if from-reference>
+
 ## Standards
 - Approach: <unpack/custom/research>
 - Deployment: <aws-copilot/docker/gcp/vercel/fly/railway/other/undecided>
@@ -181,12 +188,13 @@ If the user selected "both", deploy to both paths. After deployment, skills appe
 
 ### Step 6: Set agent state
 
-- Greenfield → set `AGENTS_STATE` to `BOOTSTRAP`
-- Existing codebase → set `AGENTS_STATE` to `ADOPT`
+- From scratch → set `AGENTS_STATE` to `BOOTSTRAP`
+- From reference → set `AGENTS_STATE` to `BOOTSTRAP`
+- Existing project → set `AGENTS_STATE` to `ADOPT`
 
 ### Step 7: Guide the user
 
-**If greenfield:**
+**If from scratch:**
 
 ```
 Project initialized!
@@ -202,12 +210,29 @@ Next step — research your project:
 Any conversation format works — raw ChatGPT exports, meeting notes, brainstorm docs.
 ```
 
-**If existing codebase:**
+**If from reference:**
 
 ```
 Project initialized!
 
-Next step: run /up-adopt to scan the codebase and generate documentation + alignment phases.
+Next step — research your project:
+
+1. Open ChatGPT or Claude
+2. Paste the contents of prompts/research-guide.md at the start
+3. Reference the existing code in your conversation — paste schemas, patterns, or
+   architecture you want to carry forward
+4. Save the chat as conversation.md at the project root
+5. Run /up-bootstrap
+
+The agent will scan the reference code during bootstrap to ground your specs in reality.
+```
+
+**If existing project:**
+
+```
+Project initialized!
+
+Next step: run /up-adopt to scan your project and generate documentation + alignment phases.
 ```
 
 ## Important

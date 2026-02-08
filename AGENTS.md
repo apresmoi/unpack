@@ -2,7 +2,7 @@
 
 <!--
 AGENTS_STATE values:
-- ADOPT: repo exists, docs are missing/weak; scan codebase and build docs + alignment phases
+- ADOPT: project exists, docs are missing/weak; scan the project and build docs + alignment phases
 - BOOTSTRAP: conversation.md exists; decompress into docs/
 - BUILD: docs + phases exist; execute phases
 -->
@@ -14,10 +14,10 @@ AGENTS_STATE values:
 This repository is operated through documentation and phases.
 
 There are two entry modes:
-- **ADOPT** (existing repo, no docs yet): scan the codebase, reverse-engineer docs, and create alignment phases.
-- **BOOTSTRAP** (greenfield, `conversation.md` exists): read the conversation, decompress it into `docs/`, and generate phases.
+- **ADOPT** (existing project, no docs yet): scan the project, reverse-engineer docs, and create alignment phases.
+- **BOOTSTRAP** (new project or from reference, `conversation.md` exists): read the conversation, decompress it into `docs/`, and generate phases. If reference code was specified during init, scan it to ground specs in existing patterns.
 
-After bootstrapping/adoption, the agent switches to **BUILD** mode and uses `docs/phases/*` to drive all work.
+After bootstrap or adopt, the agent switches to **BUILD** mode and uses `docs/phases/*` to drive all work.
 
 ## Non-negotiable rules
 
@@ -52,7 +52,7 @@ During `/up-init`, the user is asked which agent(s) they'll use, and skills are 
 
 ---
 
-## ADOPT — Adopt an existing repository
+## ADOPT — Adopt an existing project
 
 ### Goal
 
@@ -100,7 +100,7 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
      - an "Open question" in the next phase file.
 
 5. **Create alignment phases**
-   - Generate `docs/phases/phase-0.md` as adoption/bootstrap and mark it `done` only after docs are generated and indexed.
+   - Generate `docs/phases/phase-0.md` as the setup phase and mark it `done` only after docs are generated and indexed.
    - Create a minimal default alignment plan (phase-1+), then tailor it to what the repo scan found.
    - Default alignment phases (tailor based on scan):
      - **phase-1**: Make it runnable (establish "how to run", set minimal env, verify local run path)

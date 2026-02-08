@@ -26,7 +26,7 @@ These slash commands provide ergonomic access to Unpack procedures:
 |---------|---------|
 | `/up-init` | Initialize a new project from the Unpack template |
 | `/up-bootstrap` | Process a conversation file into docs, specs, and phases |
-| `/up-adopt` | Scan an existing repo and create docs + alignment phases |
+| `/up-adopt` | Scan an existing project and create docs + alignment phases |
 | `/up-status` | Show phase table, next runnable phase, blockers |
 | `/up-next` | Execute the next runnable phase |
 | `/up-snapshot` | Export current project state as a portable markdown snapshot |
