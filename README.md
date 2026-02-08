@@ -36,48 +36,25 @@ AI chat is incredible for exploring ideas — architecture, trade-offs, edge cas
 ## How it works
 
 ```mermaid
-flowchart TD
-    R(["**Research** — ChatGPT, Claude, any AI"])
-    C["conversation.md"]
-    B{"/up-bootstrap"}
-    D[("**docs/**\nspecs · phases · decisions")]
-    N{"/up-next"}
-    BUILD(["**Build** — phase by phase"])
+flowchart LR
+    I["/up-init"]
+    R(["Research<br/><i>ChatGPT · Claude · Gemini</i>"])
+    B["/up-bootstrap"]
+    D[("docs/")]
+    N["/up-next"]
     Q{"Done?"}
-    SN{"/up-snapshot"}
-    S["snapshot.md"]
-    CHAT(["**More research** — paste snapshot into AI"])
-    A{"/up-apply"}
-    SHIP(["**Ship it**"])
+    SHIP(["Ship"])
 
-    R -- save chat --> C
-    C --> B
-    B --> D
-    D --> N
-    N --> BUILD
-    BUILD --> Q
+    I --> R -- "conversation.md" --> B --> D --> N --> Q
+    Q -- "/up-snapshot → research → /up-apply" --> D
+    Q ----> SHIP
 
-    Q -- "need changes" --> SN
-    SN --> S
-    S --> CHAT
-    CHAT -- save chat --> C2["conversation.md"]
-    C2 --> A
-    A -- patch --> D
-
-    Q -- "all phases done" ----> SHIP
-
+    style I fill:#8b5cf6,stroke:#7c3aed,color:#fff
     style R fill:#6366f1,stroke:#4f46e5,color:#fff
-    style C fill:#1e1b4b,stroke:#6366f1,color:#c7d2fe
     style B fill:#4f46e5,stroke:#4338ca,color:#fff
     style D fill:#059669,stroke:#047857,color:#fff
     style N fill:#4f46e5,stroke:#4338ca,color:#fff
-    style BUILD fill:#d97706,stroke:#b45309,color:#fff
     style Q fill:#1e1b4b,stroke:#6366f1,color:#c7d2fe
-    style SN fill:#4f46e5,stroke:#4338ca,color:#fff
-    style S fill:#1e1b4b,stroke:#6366f1,color:#c7d2fe
-    style CHAT fill:#6366f1,stroke:#4f46e5,color:#fff
-    style C2 fill:#1e1b4b,stroke:#6366f1,color:#c7d2fe
-    style A fill:#4f46e5,stroke:#4338ca,color:#fff
     style SHIP fill:#059669,stroke:#047857,color:#fff
 ```
 
