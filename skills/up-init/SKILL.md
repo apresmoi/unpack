@@ -186,10 +186,12 @@ If human docs enabled: create `guide/` directory. If Mintlify enabled: create a 
 
 ### Step 5: Deploy skills
 
-Copy skills from the canonical `skills/` folder to the agent-specific discovery path(s) based on the user's agent selection:
+Copy the full content of each skill from `skills/` to the agent-specific discovery path(s) based on the user's agent selection:
 
 - **Claude Code**: copy each `skills/<name>/SKILL.md` → `.claude/skills/<name>/SKILL.md`
 - **Codex**: copy each `skills/<name>/SKILL.md` → `.agents/skills/<name>/SKILL.md`
+
+This includes `up-init` itself — the pre-shipped shim gets replaced with the full content.
 
 If the user selected "both", deploy to both paths. After deployment, skills appear as slash commands in the selected agent(s).
 
