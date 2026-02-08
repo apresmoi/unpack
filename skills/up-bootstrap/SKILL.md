@@ -22,6 +22,18 @@ If the conversation wasn't started with the research guide, extract what you can
 
 ## Procedure
 
+0. **Project setup** (first run only — skip if README already looks project-specific):
+
+   Read `docs/_meta/guide-config.md` for the user's preferences, then:
+
+   - **README**: Replace with a project-specific one. Use the project name from the conversation (or directory name as placeholder). Include the Unpack commands table and links to `docs/` and `guide/`.
+   - **LICENSE**: Update with the chosen license text (current year, ask for copyright holder if needed). If "none", delete it.
+   - **CONTRIBUTING.md**: Delete (template file).
+   - **.gitignore**: Append stack-appropriate entries based on what you detect in the conversation (TypeScript → node_modules/dist/.env, Python → __pycache__/.venv, etc.). Always include: `snapshot.md`, `conversation.md`, `.DS_Store`, `Thumbs.db`, `*.swp`.
+   - **Standards**: Copy universal standards (`standards/universal/file-length.md`, `standards/organization/folder-structure.md`, `standards/organization/agent-friendly.md`) to `docs/practices/`. Match and copy stack-specific standards based on what the conversation discusses. Copy deployment standards if applicable.
+   - **guide/**: If human docs are enabled, create the directory. If Mintlify is enabled, create a starter `mint.json`.
+   - **AGENTS_STATE**: Set to `BUILD` (done at the end of bootstrap, step 9).
+
 1. **Read the conversation file**.
 
 2. **Assess conversation complexity**. Triage is based on complexity, not just length — a 3000-line focused conversation may not need it, while a 1500-line conversation with 5 pivots does. Use the **Large Conversation Protocol** below if the conversation has **both** significant length (roughly 2000+ lines) **and** multiple topic pivots or abandoned directions. Otherwise, continue directly.

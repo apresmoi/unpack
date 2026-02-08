@@ -15,6 +15,18 @@ You are scanning an existing project and creating documentation + alignment phas
 
 Follow the **ADOPT** procedure defined in `AGENTS.md`:
 
+0. **Project setup** (first run only — skip if README already looks project-specific):
+
+   Read `docs/_meta/guide-config.md` for the user's preferences, then:
+
+   - **README**: Replace with a project-specific one. Use the project/directory name. Include the Unpack commands table and links to `docs/` and `guide/`.
+   - **LICENSE**: Update with the chosen license text (current year, ask for copyright holder if needed). If "none", delete it.
+   - **CONTRIBUTING.md**: Delete (template file).
+   - **.gitignore**: Append stack-appropriate entries based on what you detect in the scan. Always include: `snapshot.md`, `conversation.md`, `.DS_Store`, `Thumbs.db`, `*.swp`.
+   - **guide/**: If human docs are enabled, create the directory. If Mintlify is enabled, create a starter `mint.json`.
+
+   Standards loading happens in step 5 below (after the scan detects the stack).
+
 1. **Create the docs scaffold** if missing: `docs/_meta`, `docs/specs`, `docs/phases`, `docs/decisions`, `docs/discovery`.
 
 2. **Scan the repository** (read-only, no refactors):

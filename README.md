@@ -76,7 +76,7 @@ flowchart LR
 
 1. Click **"Use this template"** on GitHub to create your repo
 2. Clone it locally
-3. Run `/up-init` — the wizard configures your agent, license, coding standards, deployment, and docs preferences. Stack and libraries are auto-detected later from your conversation
+3. Run `/up-init` — quick setup: choose your agent, starting point, and preferences. Takes under a minute
 4. Have a research conversation in ChatGPT (use [prompts/research-guide.md](prompts/research-guide.md))
 5. Save the chat as `conversation.md` at the project root
 6. Run `/up-bootstrap` to decompress into structured docs and phases
@@ -112,7 +112,7 @@ Check the version in `AGENTS.md` (`UNPACK_VERSION` comment) to see what you're r
 
 | Skill | When to use |
 |-------|-------------|
-| `/up-init` | Setting up a new project — stack, standards, and docs preferences |
+| `/up-init` | Quick setup — choose agent, starting point, and preferences |
 | `/up-bootstrap` | Processing your first conversation into docs, specs, and phases |
 | `/up-adopt` | Bringing Unpack into an existing project |
 | `/up-status` | Checking project progress, blockers, and the next phase |
