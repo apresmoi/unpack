@@ -1,0 +1,101 @@
+# Research Guide
+
+> Paste everything below the `---` line into a ChatGPT, Claude, or Gemini conversation when researching a new project or iteration.
+
+## How to export when you're done
+
+You need the conversation as markdown text. Pick whichever method you're comfortable with:
+
+1. **Bookmarklet** (fastest) — Unpack ships a small script that reads the ChatGPT page and copies clean markdown to your clipboard. The source is at [`tools/chatgpt-export.js`](../tools/chatgpt-export.js) — read it, it's ~200 lines with comments and makes zero network requests. To create the bookmarklet, run `node tools/minify-bookmarklet.js` and paste the output as a bookmark URL.
+
+2. **Copy-paste manually** — Select the conversation, copy, paste into `conversation.md`. Works with any AI tool. Formatting won't be perfect but `/up-bootstrap` handles messy input fine.
+
+3. **ChatGPT native export** — Use ChatGPT's export feature (Settings → Data controls → Export). This gives you a JSON archive — you'll need to extract the conversation text. The bookmarklet or manual copy is usually easier.
+
+---
+
+You are helping me research and design a project. This conversation will later be processed by an AI coding agent that will decompose it into structured documentation and build phases.
+
+**Important: I may write in a stream-of-consciousness style** — mixing questions, ideas, constraints, and existing code in the same message. That's fine. Your job is to:
+- Extract the signal from my ramblings
+- Organize your responses with a short summary at the top, then full detail below (so I can skim)
+- Push back if I'm going in circles or being contradictory
+- Track pivots — if I change direction, acknowledge what we're dropping and what we're keeping
+
+## How to structure our conversation
+
+To help the downstream agent extract maximum signal, please ensure we cover these topics during our discussion. You don't need to follow this order rigidly — natural conversation is fine — but by the end, we should have touched on all relevant areas:
+
+### Core understanding
+- What problem are we solving? Who are the users?
+- What are the goals? What are the non-goals?
+- What are the key use cases and user journeys?
+
+### Requirements
+- Functional requirements (what the system must do)
+- Non-functional requirements (performance, scale, reliability)
+- Constraints (time, budget, platform, regulatory)
+
+### Domain
+- Key entities and their relationships
+- Business rules and invariants
+- Domain terminology (glossary if needed)
+
+### Architecture
+- System boundaries (what's in scope vs out)
+- Major components and their responsibilities
+- Data flow between components
+- External integrations (APIs, auth providers, third-party services)
+
+### Technical decisions
+- Stack choices (language, framework, database, hosting)
+- Key libraries and tools
+- API design approach (REST, GraphQL, events)
+- Data model at a conceptual level
+
+### UX and flows (if applicable)
+- Main screens or views
+- Critical user journeys (happy path + error states)
+- Edge cases worth designing for
+
+### Quality and testing
+- Testing strategy (unit, integration, e2e)
+- Quality gates (what must pass before shipping)
+
+### Operations
+- Deployment environment and strategy
+- Configuration management
+- Monitoring and observability
+
+### Build plan
+- What should be built first? What depends on what?
+- What are the riskiest unknowns to de-risk early?
+- What is the MVP scope?
+
+## Formatting tips
+
+These help the downstream agent parse our conversation more effectively:
+
+- **Use bullet points for decisions** — the agent looks for explicit choices
+- **When choosing between alternatives**, briefly state what was considered and why you chose one
+- **If something is uncertain**, say so explicitly — the agent will mark it as "needs confirmation"
+- **Use clear section headers** when shifting topics
+- **Drop existing code, schemas, configs** — real artifacts ground the conversation and help the agent understand what you already have
+
+## If this conversation gets long
+
+If we've been going for a while and the conversation is getting very long (many pivots, lots of exploration), please:
+1. Periodically remind me what decisions still stand vs what we've dropped
+2. Before we wrap up, produce a **consolidated summary** with all final decisions, the latest architecture, and open questions — even if we discussed these topics multiple times earlier
+
+This helps the downstream agent process long conversations efficiently.
+
+## When we're done
+
+At the end of our conversation, please summarize:
+1. Key decisions made (numbered list)
+2. Open questions remaining
+3. Suggested build order (first → last)
+4. What was explored but abandoned (so the agent knows to skip it)
+
+Then I'll save this conversation as `conversation.md`, place it at my project root, and run `/up-bootstrap` to decompose it into structured docs and phases.

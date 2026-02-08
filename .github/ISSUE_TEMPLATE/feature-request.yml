@@ -1,0 +1,81 @@
+name: Feature Request
+description: Suggest an improvement to an Unpack skill, standard, or workflow
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: What area does this affect?
+      options:
+        - Skill improvement (existing skill needs to work better)
+        - New skill idea
+        - Standards library (new or improved standard)
+        - Prompts (research guide or snapshot context)
+        - Documentation template (docs/ structure)
+        - Onboarding / init flow
+        - Upgrade / versioning
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill is this related to? (if applicable)
+      options:
+        - /up-init
+        - /up-bootstrap
+        - /up-adopt
+        - /up-status
+        - /up-next
+        - /up-snapshot
+        - /up-apply
+        - /up-document
+        - /up-extract-standards
+        - N/A
+    validations:
+      required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What workflow are you trying to improve?
+      description: "Describe the situation you're in when the current system falls short. What are you trying to do?"
+      placeholder: "When I have a conversation that mixes two separate features, the bootstrap agent..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+      description: "Describe your ideal outcome. How should the system behave?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation ideas
+      description: "If you've thought about how to implement this, share it here. Which files would need to change? What instructions should be added to the skill?"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: stack
+    attributes:
+      label: What stack are you using?
+      description: "Helps us prioritize standards and features"
+      options:
+        - TypeScript (React)
+        - TypeScript (Next.js)
+        - TypeScript (Express)
+        - TypeScript (other)
+        - Python
+        - Go
+        - Rust
+        - Other
+        - N/A
+    validations:
+      required: false

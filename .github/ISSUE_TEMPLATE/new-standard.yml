@@ -1,0 +1,58 @@
+name: New Standard
+description: Propose a new coding standard for the standards library
+title: "[Standard]: "
+labels: ["standard"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - TypeScript (framework)
+        - TypeScript (library)
+        - Python
+        - Go
+        - Rust
+        - Infrastructure
+        - Organization
+        - Universal
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Standard name
+      description: "e.g., 'supabase', 'fastapi', 'turborepo'"
+      placeholder: "library-or-tool-name"
+    validations:
+      required: true
+
+  - type: textarea
+    id: patterns
+    attributes:
+      label: Key patterns to codify
+      description: "What are the main conventions this standard should enforce? List the patterns you'd want an AI coding agent to follow."
+      placeholder: |
+        - Always use X pattern for Y
+        - Prefer A over B because...
+        - File structure should be...
+    validations:
+      required: true
+
+  - type: textarea
+    id: anti-patterns
+    attributes:
+      label: Anti-patterns
+      description: "What should the agent avoid? Common mistakes or bad practices."
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example repo or code
+      description: "Link to a repo or paste code that demonstrates these patterns well. This is the best way to seed a standard — run /up-extract-standards on it."
+    validations:
+      required: false

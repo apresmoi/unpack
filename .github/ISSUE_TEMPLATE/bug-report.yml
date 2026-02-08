@@ -1,0 +1,85 @@
+name: Bug Report
+description: Something didn't work as expected during an Unpack workflow
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill were you using?
+      options:
+        - /up-init
+        - /up-bootstrap
+        - /up-adopt
+        - /up-status
+        - /up-next
+        - /up-snapshot
+        - /up-apply
+        - /up-document
+        - /up-extract-standards
+        - Not a specific skill
+    validations:
+      required: true
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Which agent?
+      options:
+        - Claude Code
+        - Codex
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Unpack version
+      description: "Check the UNPACK_VERSION comment in your AGENTS.md"
+      placeholder: "1.0.0"
+    validations:
+      required: false
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the issue. What did you expect to happen vs what actually happened?
+      placeholder: "I ran /up-bootstrap and..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: conversation-context
+    attributes:
+      label: Conversation context
+      description: "What kind of input were you working with? (e.g., 'A 3000-line ChatGPT export about a REST API', 'An existing Express project with no tests'). Don't paste the full conversation — just describe it."
+      placeholder: "A ~2000 line conversation about building a dashboard app, with 2 major pivots"
+    validations:
+      required: false
+
+  - type: textarea
+    id: agent-output
+    attributes:
+      label: What did the agent produce?
+      description: "Paste the relevant agent output, error messages, or describe what it generated incorrectly."
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened instead?
+      description: "How should the skill have handled this situation?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix
+      description: "If you have an idea for how to fix this in the skill instructions, share it here. Which file should change and how?"
+    validations:
+      required: false

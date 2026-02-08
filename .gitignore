@@ -1,0 +1,13 @@
+# Unpack temporary files (created and consumed by skills)
+snapshot.md
+conversation.md
+conversation-*.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
