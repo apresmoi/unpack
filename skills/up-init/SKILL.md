@@ -102,6 +102,11 @@ Next step — research your project:
 3. Have your design conversation (any style — stream of consciousness is fine)
 4. Save the chat as conversation.md at the project root
 5. Run /up-bootstrap
+
+Saving your conversation:
+- ChatGPT: run `node tools/minify-bookmarklet.js`, save the output as a browser bookmark, then click it on any chat to copy as markdown
+- Any AI: select all → copy → paste into conversation.md
+- Long/messy chats: paste prompts/extract-conversation.md into the chat — it'll consolidate final decisions for you
 ```
 
 If from reference, add: "Reference the existing code in your conversation — paste schemas, patterns, or architecture you want to carry forward."

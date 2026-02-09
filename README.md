@@ -6,7 +6,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/agents-Claude_Code_%7C_Codex-8b5cf6" alt="Claude Code | Codex" />
   <img src="https://img.shields.io/badge/standards-15_included-green" alt="15 standards" />
-  <img src="https://img.shields.io/badge/skills-9_commands-orange" alt="9 skills" />
+  <img src="https://img.shields.io/badge/skills-10_commands-orange" alt="10 skills" />
 </p>
 
 <p align="center">
@@ -120,6 +120,7 @@ Check the version in `AGENTS.md` (`UNPACK_VERSION` comment) to see what you're r
 | `/up-snapshot` | Exporting project state for external research |
 | `/up-apply` | Applying a follow-up conversation to patch or steer existing docs |
 | `/up-document` | Generating human-readable docs in `guide/` (supports Mintlify) |
+| `/up-analyze` | Checking consistency between specs, phases, and decisions |
 | `/up-extract-standards` | Scanning a repo to extract coding standards |
 
 ## Working with conversations
@@ -133,6 +134,18 @@ Unpack accepts any conversation format — not just ones started with the resear
 - **Meeting notes**, brainstorm docs, or design discussions in any markdown format
 
 The research guide is recommended because it produces the most structured input, but the agent will extract what it can from any format and mark gaps as open questions.
+
+### Exporting your conversation
+
+Save the conversation as `conversation.md` at your project root. Three methods:
+
+| Method | Best for | How |
+|--------|----------|-----|
+| **Bookmarklet** | ChatGPT conversations | One-time setup: run `node tools/minify-bookmarklet.js`, save the output as a browser bookmark. Then just open the chat and click the bookmark — full conversation copied to clipboard. [Source](tools/chatgpt-export.js) (~200 lines, no network requests). |
+| **Extraction prompt** | Long/messy conversations with many pivots | Paste [`prompts/extract-conversation.md`](prompts/extract-conversation.md) into the conversation. The AI consolidates final decisions, preserves your reasoning, and drops abandoned ideas. Gives `/up-bootstrap` cleaner input. |
+| **Copy-paste** | Any AI tool | Select all, copy, paste into `conversation.md`. Messy formatting is fine. |
+
+See the [research guide](prompts/research-guide.md) for detailed setup instructions.
 
 ### Conversation versioning
 

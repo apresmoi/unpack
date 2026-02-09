@@ -4,13 +4,30 @@
 
 ## How to export when you're done
 
-You need the conversation as markdown text. Pick whichever method you're comfortable with:
+You need the conversation saved as `conversation.md` at your project root. Three options, from best to simplest:
 
-1. **Bookmarklet** (fastest) — Unpack ships a small script that reads the ChatGPT page and copies clean markdown to your clipboard. The source is at [`tools/chatgpt-export.js`](../tools/chatgpt-export.js) — read it, it's ~200 lines with comments and makes zero network requests. To create the bookmarklet, run `node tools/minify-bookmarklet.js` and paste the output as a bookmark URL.
+### Option 1: Bookmarklet (recommended for ChatGPT)
 
-2. **Copy-paste manually** — Select the conversation, copy, paste into `conversation.md`. Works with any AI tool. Formatting won't be perfect but `/up-bootstrap` handles messy input fine.
+A small script that reads the ChatGPT page and copies clean markdown to your clipboard. Makes zero network requests — [read the source](../tools/chatgpt-export.js), it's ~200 lines.
 
-3. **ChatGPT native export** — Use ChatGPT's export feature (Settings → Data controls → Export). This gives you a JSON archive — you'll need to extract the conversation text. The bookmarklet or manual copy is usually easier.
+**One-time setup:**
+
+1. Run `node tools/minify-bookmarklet.js` in your terminal — it prints a `javascript:...` URL
+2. In Chrome: Bookmarks → Bookmark Manager → three-dot menu → "Add new bookmark"
+3. Name it "Export Chat", paste the URL from step 1
+4. (In other browsers: create any bookmark, then edit its URL)
+
+**To export:** Open your ChatGPT conversation, click the bookmark. It copies the full conversation as markdown. Paste into `conversation.md`.
+
+### Option 2: Extraction prompt (best for long/messy conversations)
+
+Instead of exporting raw, ask the AI to consolidate the final decisions for you. Paste the prompt from [`prompts/extract-conversation.md`](extract-conversation.md) into the conversation. The AI produces a structured dump — final decisions only, your reasoning preserved, abandoned ideas clearly marked.
+
+Better than the bookmarklet when the conversation had many pivots or got very long — gives `/up-bootstrap` cleaner input.
+
+### Option 3: Copy-paste manually
+
+Select all messages in the conversation, copy, paste into `conversation.md`. Works with any AI tool (Claude, Gemini, etc.). Formatting won't be perfect but `/up-bootstrap` handles messy input.
 
 ---
 
