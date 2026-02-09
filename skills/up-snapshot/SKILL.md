@@ -5,71 +5,144 @@ description: Export current project state as a portable markdown snapshot for ex
 
 # Export project state as a portable snapshot
 
-You are creating a compressed markdown snapshot of the current project state. This snapshot is designed to be pasted into ChatGPT, Claude, or another AI tool for further research and iteration.
+Create a narrative markdown snapshot of the project that can be pasted into ChatGPT, Claude, or any AI tool for research conversations.
 
 ## Input
 
-`$ARGUMENTS` can specify focus areas (e.g., "auth", "phase-3", "architecture"). If empty, export everything.
+`$ARGUMENTS` may contain a description of what the user wants (e.g., "database schemas", "full overview"). If empty, ask.
 
-## Procedure
+## Step 1: Figure out what they need
 
-1. **Read the full project state**:
-   - `docs/index.md`
-   - All `docs/specs/*` files
-   - All `docs/phases/*` files (skip `phase-template.md`)
-   - `docs/_meta/project-memory.md` (if exists)
-   - `docs/_meta/workflow.md`
-   - `docs/practices/*` (summarize, don't copy verbatim)
-   - List files in `conversations/` for history
+If `$ARGUMENTS` already describes a clear intent, skip to Step 2.
 
-2. **If focus areas specified**: filter to only relevant specs, phases, and decisions. Include enough surrounding context for the external AI to understand the project.
+Otherwise, present this message (keep it exactly this brief):
 
-3. **Compile a single markdown document** with this structure:
+```
+What kind of snapshot?
 
-   ```markdown
-   # Project Snapshot — <project name>
+- **Overview** — what this project is, where we are, what's decided
+- **Design focus** — specific area you want to discuss (e.g., "redesign the UI", "rethink the data model")
+- **Implementation** — how something actually works today, with schemas and code references
+- **Everything** — full dump, no filter
 
-   Generated: <date>
-   Focus: <focus areas or "full project">
+Or just tell me what you want to take to ChatGPT and I'll figure it out.
+```
 
-   ## Current state
-   - Phase status table (from index.md)
-   - Active/next phase details
-   - Open questions/blockers
+Wait for the user's response.
 
-   ## Specs summary
-   (Compressed version of all relevant specs — key requirements, architecture, decisions)
+**If they pick design focus or implementation but don't say which area:** ask "Which area?" — nothing else. Wait again. That's your max 2 rounds of clarification.
 
-   ## Architecture
-   (From specs/03-architecture.md — components, boundaries, data flows)
+**If they describe something specific in any form:** go straight to Step 2. Don't ask for clarification you don't need.
 
-   ## Key decisions
-   (From project-memory.md — decisions with rationale, tagged Explicit/Inferred)
+## Step 2: Read project state
 
-   ## Active phase details
-   (Full content of current/next phase including work items and completion criteria)
+Read what you need based on the intent — not everything:
 
-   ## Coding standards in use
-   (List of loaded practices with key highlights — not full content)
+- **Overview**: `docs/index.md`, `docs/specs/*`, `docs/_meta/project-memory.md`
+- **Design focus**: `docs/index.md`, the relevant specs, the relevant phases, relevant decisions from `project-memory.md`
+- **Implementation**: `docs/index.md`, relevant specs, relevant phases, AND relevant source files (schemas, configs, key modules) — yes, include actual code for implementation snapshots
+- **Everything**: all docs (`index.md`, `specs/*`, `phases/*`, `_meta/project-memory.md`, `practices/*`), conversation list from `conversations/`
 
-   ## Conversation history
-   (Numbered list of processed conversations with names)
+Use Task agents with subagent_type=Explore if you need to find relevant source files for implementation snapshots. For other types, direct reads are fine.
 
-   ## Open questions
-   (Aggregated from all phase files and specs)
-   ```
+## Step 3: Write the snapshot
 
-4. **Write to `snapshot.md`** at the repo root.
+Write to `snapshot.md` at the repo root.
 
-5. **Report**:
-   - "Snapshot exported to `snapshot.md`"
-   - "To continue research: paste `prompts/snapshot-context.md` into ChatGPT, then paste the snapshot content"
-   - "When done: save the new conversation as `conversation.md` and run `/up-apply`"
+**The snapshot must be narrative, not a file listing.** Write about the project as if you're briefing someone who will help you think about it. Reference file paths inline only when they ground the narrative (e.g., "the claim extraction pipeline (`packages/db/scripts/extract-claims.ts`) reads from...").
+
+### Structure by snapshot type
+
+**Overview:**
+```markdown
+# <Project Name> — Snapshot
+
+> <1-sentence description of the project>
+
+## Where we are
+<Phase status, what's done, what's in progress, what's next. Narrative, not a table.>
+
+## How it works
+<Architecture, components, data flows — described narratively with domain language.>
+
+## Domain model
+<Key entities, relationships, business rules. Use the project's own terminology.>
+
+## Key decisions
+<Only the decisions that shape the project's identity. Include rationale.>
+
+## Open questions
+<What's unresolved, what needs input.>
+```
+
+**Design focus:**
+```markdown
+# <Project Name> — <Area> Design Snapshot
+
+> <1-sentence project context + what this snapshot focuses on>
+
+## Project context
+<Just enough to understand the project — 1-2 paragraphs max.>
+
+## Current state of <area>
+<How it works today. What's built, what's not. Include relevant schemas, patterns, or code snippets.>
+
+## Decisions shaping <area>
+<Only the decisions relevant to this area, with rationale.>
+
+## What we want to discuss
+<Restate the user's intent — what they want to explore, redesign, or decide.>
+
+## Open questions
+<Unresolved items relevant to this area.>
+```
+
+**Implementation:**
+```markdown
+# <Project Name> — <Area> Implementation Snapshot
+
+> <1-sentence context>
+
+## How <area> works
+<Step-by-step narrative of the current implementation. Include actual code snippets, schema definitions, config shapes — whatever makes it concrete.>
+
+## Key files
+<Brief map of where things live, only for the relevant area.>
+
+## Decisions and constraints
+<Technical decisions that constrain this area.>
+
+## Known issues / gaps
+<What's missing, broken, or needs improvement.>
+```
+
+**Everything:**
+Use the Overview structure but expand every section fully. Include phase details, all decisions, coding standards summary, conversation history.
+
+### Writing rules
+
+- **Speak about the project, not about files.** "The system extracts claims from transcribed speech" not "The extraction spec is in `docs/specs/05-extraction.md`"
+- **Use the project's domain language.** If the project calls things "episodes" and "claims", use those words — the point is that someone reading this snapshot will speak the same language when they respond
+- **Include code/schemas when they add clarity.** Especially for implementation snapshots — paste the actual Prisma schema, the actual API route, the actual config shape
+- **Inline file references where useful.** "(see `packages/db/prisma/schema.prisma`)" — but only when someone might want to find it later
+- **Keep under 8000 words** if possible — this goes into a context window
+
+## Step 4: Report
+
+After writing the snapshot, say:
+
+```
+Snapshot saved to `snapshot.md`.
+
+Paste it into ChatGPT or Claude to continue your research. When you're done, save the conversation as `conversation.md` and run `/up-apply`.
+```
+
+That's it. Two lines.
 
 ## Important
 
-- Optimize for signal density — this will be pasted into a context window
-- Include enough context that the external AI understands the project without repo access
-- Do NOT include source code from `src/` — only documentation
-- Keep under 8000 words if possible (to fit in a single ChatGPT message)
-- If the project is large and a full snapshot exceeds the limit, prioritize: current phase > architecture > decisions > specs > standards
+- Keep your messages to the user SHORT — 1-2 lines unless presenting a list
+- Do NOT read files before asking the user what they want
+- Do NOT use AskUserQuestion — this is conversational
+- Max 3 rounds of back-and-forth before you start building
+- If the user gives you enough info in `$ARGUMENTS`, skip straight to reading + writing (0 rounds)
