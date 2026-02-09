@@ -9,6 +9,7 @@
 ## Sources of truth
 
 - `docs/specs/*`: system + product truth
+- `docs/specs/*/## Change log`: why specs changed (appended by steering phases)
 - `docs/phases/*`: execution plan truth
 - `docs/decisions/*`: why we chose X over Y
 - `docs/index.md`: navigation + current status truth

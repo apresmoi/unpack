@@ -38,8 +38,14 @@ What this phase achieves in one paragraph.
 
 ## Work items (ordered)
 
-- [ ] Item 1
-- [ ] Item 2
+- [ ] Item 1 [S: spec-file#section]
+- [ ] Item 2 [S: spec-file]
+- [ ] Item 3
+
+<!-- [S: spec-file#section] markers link work items to the spec content they implement.
+     Use short names: 02-domain-model, 01-requirements#FR-3, etc.
+     Multiple refs: [S: 01-requirements#FR-3, 05-ux#registration-flow]
+     Omit for pure infrastructure tasks with no spec backing. -->
 
 ## Completion criteria (must all be true)
 

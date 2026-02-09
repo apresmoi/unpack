@@ -109,6 +109,7 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
      - **phase-4**: Architecture cleanup (boundaries, modules, dependency direction, dead code)
      - **phase-5**: Docs become truth (confirm inferred architecture with user, upgrade specs from "inferred" to "confirmed")
    - Each phase must include: `depends_on`, ordered work items, completion criteria, test plan, open questions/blockers.
+   - Add `[S: spec-ref]` traceability markers to work items linking them to the spec content they implement (e.g., `[S: 03-architecture#data-layer]`). Omit for pure infrastructure tasks.
 
 6. **Update `docs/index.md`**
    - Index all discovery docs, specs, decisions, and phases.
@@ -162,6 +163,7 @@ Read `conversation.md`, extract all design information, decompress it into the s
    - Each phase file must have: YAML frontmatter, `depends_on`, work items, completion criteria, test plan.
    - Create `phase-0.md` as bootstrap and mark it `done`.
    - Keep phases small (1-3 focused iterations each).
+   - Add `[S: spec-ref]` traceability markers to work items linking them to the spec content they implement (e.g., `[S: 02-domain-model#User]`). Omit for pure infrastructure tasks.
 
 9. **Update `docs/index.md`**
    - Index all spec files and phase files.
@@ -222,6 +224,7 @@ Before planning or executing any phase, read:
 
 ### High-level loop
 
+0. (Optional) Run `/up-analyze` to check spec/phase consistency — especially useful after a steering phase or when resuming after a break.
 1. Read the files listed above.
 2. Select the **next runnable phase**:
    - status != `done`
@@ -257,9 +260,31 @@ Then:
    - the new constraints
    - impacts on existing phases (update dependencies if needed)
 4. **Split if needed.** If a steering phase covers multiple independent concerns (e.g., schema refactor + new subsystem + deployment change), create separate steering phases for each concern with their own dependencies. A steering phase should be as focused as a delivery phase.
-5. Update `docs/index.md`.
-6. Add a decision entry in `docs/_meta/project-memory.md` explaining why the steering exists.
-7. When an important decision is accepted, create an ADR and cross-reference the decision ID.
+5. **Update specs with delta annotations.** When a steering phase modifies spec files, update the spec body AND append a change log entry at the bottom of the file. Format:
+   ```markdown
+   ---
+   ## Change log
+
+   ### Phase N — <title> (D-XXX)
+
+   **ADDED: <what>**
+   - Description of new content
+
+   **MODIFIED: <what>**
+   - Was: <previous>
+   - Now: <new>
+   - Rationale: see D-XXX
+
+   **REMOVED: <what>**
+   - Reason / where it moved
+   ```
+   - Use ADDED, MODIFIED, and REMOVED as appropriate. Only include the types that apply.
+   - The `## Change log` heading is created once; subsequent steering phases append new `### Phase N` entries under it.
+   - During bootstrap there is no change log (it's the initial write).
+   - If the change log grows past ~5 entries, offer to consolidate old entries into a brief summary.
+6. Update `docs/index.md`.
+7. Add a decision entry in `docs/_meta/project-memory.md` explaining why the steering exists.
+8. When an important decision is accepted, create an ADR and cross-reference the decision ID.
 
 ### Decision management
 

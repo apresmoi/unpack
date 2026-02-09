@@ -32,6 +32,7 @@ These slash commands provide ergonomic access to Unpack procedures:
 | `/up-snapshot` | Export current project state as a portable markdown snapshot |
 | `/up-apply` | Apply a follow-up conversation to patch or steer existing docs |
 | `/up-document` | Generate or update human-readable docs in `guide/` |
+| `/up-analyze` | Check consistency between specs, phases, and decisions |
 | `/up-extract-standards` | Scan an example repo and extract coding standards |
 
 ## Skill deployment
