@@ -28,10 +28,15 @@ Use AskUserQuestion to gather preferences. Aim for **2 rounds max**. Group quest
 
 **Round 2:**
 - How are you going to deploy? AWS Copilot, Docker, GCP, Vercel, Fly.io, Railway, other, or not sure yet.
+- Auto-commit after completing phases? Yes (recommended), or no.
 - Do you want human-readable docs? No, yes (end-user / technical / full), or decide later.
 - If yes to docs: Mintlify integration? (yes / no)
 
 Skip questions that don't apply (e.g., don't ask about Mintlify if they said no to docs). If only 1 question remains, merge it into Round 1 instead of doing a separate round.
+
+### Step 1b: Git identity (optional)
+
+After Round 2, check the current git config for the repo: `git config user.name` and `git config user.email`. Show the user what's configured and ask if they want to change it for this repo. If yes, run `git config user.name "..."` and `git config user.email "..."` (repo-level, not global).
 
 ### Step 2: Write configuration
 
@@ -52,6 +57,9 @@ Create `docs/_meta/guide-config.md` — this is the only file that MUST exist fo
 - Enabled: <yes/no/later>
 - Level: <end-user/technical/full>
 - Mintlify: <yes/no>
+
+## Git
+- Autocommit: <yes/no>
 
 ## Notes
 - `/up-bootstrap` and `/up-adopt` read this file to configure the project

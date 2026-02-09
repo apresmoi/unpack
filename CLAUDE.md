@@ -38,6 +38,12 @@ These slash commands provide ergonomic access to Unpack procedures:
 
 Skills are authored in `skills/` (the canonical source). During `/up-init`, they are deployed to `.claude/skills/` so they appear as slash commands. If skills aren't showing up, ensure they've been deployed — see the "Skill deployment" section in `AGENTS.md`.
 
+## Commit rules
+
+- **Never add `Co-Authored-By` lines.** No AI attribution in commits — ever.
+- Follow the conventional commit types defined in `AGENTS.md`.
+- If autocommit is enabled in `docs/_meta/guide-config.md`, commit automatically after completing each phase.
+
 ## Standards library
 
 Coding standards live in `standards/` organized by stack. Use `/up-extract-standards` to populate them from example repos. Standards are automatically matched and copied into `docs/practices/` during `/up-bootstrap` or `/up-adopt`.

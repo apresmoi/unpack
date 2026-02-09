@@ -234,9 +234,9 @@ Before planning or executing any phase, read:
 5. Run the phase test commands (or explain why not runnable).
 6. Update:
    - phase status + checkboxes + timestamps
-   - `docs/index.md` phase table
+   - `docs/index.md` phase table (keep formatting clean — no duplicate separators, consistent table alignment)
    - any affected specs (if behavior/architecture changed)
-   - add ADRs for decisions that matter
+   - promote qualifying decisions to ADRs (see Decision management below)
    - append new decisions to `docs/_meta/project-memory.md`
 
 ### Steering rule (mandatory)
@@ -256,9 +256,70 @@ Then:
    - why it changed
    - the new constraints
    - impacts on existing phases (update dependencies if needed)
-4. Update `docs/index.md`.
-5. Add a decision entry in `docs/_meta/project-memory.md` explaining why the steering exists.
-6. When an important decision is accepted, create an ADR and cross-reference the decision ID.
+4. **Split if needed.** If a steering phase covers multiple independent concerns (e.g., schema refactor + new subsystem + deployment change), create separate steering phases for each concern with their own dependencies. A steering phase should be as focused as a delivery phase.
+5. Update `docs/index.md`.
+6. Add a decision entry in `docs/_meta/project-memory.md` explaining why the steering exists.
+7. When an important decision is accepted, create an ADR and cross-reference the decision ID.
+
+### Decision management
+
+`project-memory.md` is the quick, append-only log. Every decision goes here first with a `D-NNN` ID. ADRs are the long-term record for decisions that shape the project.
+
+**Promote to ADR** when a decision meets any of these:
+- It affects architecture or system boundaries
+- It's referenced by 2+ phases
+- It supersedes a previous decision
+- The user explicitly confirms it as stable
+
+**When promoting:**
+1. Create `docs/decisions/adr-NNNN-short-title.md` from the template.
+2. Cross-reference the decision ID (e.g., `Decision ref: D-007`).
+3. Mark the project-memory entry as `→ Promoted to ADR-NNNN`.
+
+**At phase boundaries** (when marking a phase `done`), review any new decisions added during that phase and promote qualifying ones. Do not let project-memory.md grow beyond ~30 unpromoted decisions without promoting the stable ones.
+
+---
+
+## Commit conventions
+
+All commits must use [Conventional Commits](https://www.conventionalcommits.org/) format: `type: description`.
+
+### Standard types
+
+| Type | When to use |
+|------|-------------|
+| `feat` | New functionality |
+| `fix` | Bug fix |
+| `refactor` | Restructuring without behavior change |
+| `docs` | Documentation-only changes |
+| `test` | Test additions or changes |
+| `chore` | Maintenance, deps, tooling |
+
+### Unpack-specific types
+
+| Type | When to use |
+|------|-------------|
+| `bootstrap` | Initial conversation decomposition into docs/specs/phases |
+| `steer` | Steering phase — scope change, pivot, or constraint update |
+| `done` | Phase completion (include phase number and title) |
+
+### Examples
+
+```
+bootstrap: decompose initial-design conversation into docs, specs, and phases
+steer: local-first pivot — defer cloud deployment (phase-9)
+done: phase-1 — schema & database foundation
+feat: rclone sync script + ingestion hardening
+fix: NaN sanitization in speaker embeddings
+```
+
+### Rules
+
+- **No `Co-Authored-By` lines.** No AI attribution in commits.
+- Keep the subject line under 72 characters.
+- Use the body for details (what changed, why, decision refs).
+- Reference phase numbers and decision IDs where relevant.
+- **Autocommit** (if enabled in `guide-config.md`): the agent commits automatically after completing each phase using the `done:` type.
 
 ---
 
