@@ -69,23 +69,23 @@ Create `docs/_meta/guide-config.md` — this is the only file that MUST exist fo
 
 ### Step 3: Deploy skills
 
-Deploy skills to the agent-specific paths using a single bash command. Do NOT use a Task agent for this — it's a simple copy loop.
+Overwrite the pre-deployed shims with pointer shims that reference the canonical skill files. Each deployed skill keeps its frontmatter and adds a single instruction line. Do NOT use a Task agent for this — it's a simple loop.
 
 Based on the user's agent selection, run one of:
 
 **Claude Code only:**
 ```bash
-for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".claude/skills/$name" && cp "$skill/SKILL.md" ".claude/skills/$name/SKILL.md"; done
+for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".claude/skills/$name" && { head -4 "$skill/SKILL.md"; echo ""; echo "Read and follow the instructions in \`skills/$name/SKILL.md\`."; } > ".claude/skills/$name/SKILL.md"; done
 ```
 
 **Codex only:**
 ```bash
-for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".agents/skills/$name" && cp "$skill/SKILL.md" ".agents/skills/$name/SKILL.md"; done
+for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".agents/skills/$name" && { head -4 "$skill/SKILL.md"; echo ""; echo "Read and follow the instructions in \`skills/$name/SKILL.md\`."; } > ".agents/skills/$name/SKILL.md"; done
 ```
 
 **Both:**
 ```bash
-for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".claude/skills/$name" ".agents/skills/$name" && cp "$skill/SKILL.md" ".claude/skills/$name/SKILL.md" && cp "$skill/SKILL.md" ".agents/skills/$name/SKILL.md"; done
+for skill in skills/*/; do name=$(basename "$skill"); mkdir -p ".claude/skills/$name" ".agents/skills/$name" && { head -4 "$skill/SKILL.md"; echo ""; echo "Read and follow the instructions in \`skills/$name/SKILL.md\`."; } | tee ".claude/skills/$name/SKILL.md" > ".agents/skills/$name/SKILL.md"; done
 ```
 
 ### Step 4: Guide the user
