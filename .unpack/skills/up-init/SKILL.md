@@ -104,10 +104,11 @@ Next step — research your project:
 5. Run /up-bootstrap
 
 Saving your conversation:
-- ChatGPT: run `node .unpack/tools/minify-bookmarklet.js`, save the output as a browser bookmark, then click it on any chat to copy as markdown
 - Any AI: select all → copy → paste into conversation.md
 - Long/messy chats: paste .unpack/prompts/extract-conversation.md into the chat — it'll consolidate final decisions for you
 ```
+
+Then ask: "Want me to generate a bookmarklet for exporting conversations? It's a one-click bookmark that copies the chat as markdown." If yes, ask which platform (ChatGPT or Claude) and run `node .unpack/tools/minify-bookmarklet.js <chatgpt|claude>`. Show the output so they can save it as a bookmark.
 
 If from reference, add: "Reference the existing code in your conversation — paste schemas, patterns, or architecture you want to carry forward."
 

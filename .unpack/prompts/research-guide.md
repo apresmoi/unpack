@@ -6,18 +6,18 @@
 
 You need the conversation saved as `conversation.md` at your project root. Three options, from best to simplest:
 
-### Option 1: Bookmarklet (recommended for ChatGPT)
+### Option 1: Bookmarklet (recommended for ChatGPT and Claude)
 
-A small script that reads the ChatGPT page and copies clean markdown to your clipboard. Makes zero network requests — [read the source](../tools/chatgpt-export.js), it's ~200 lines.
+A small script that reads the chat page and copies clean markdown to your clipboard. Makes zero network requests — read the source ([ChatGPT](../tools/chatgpt-export.js), [Claude](../tools/claude-export.js)), they're ~200 lines each.
 
 **One-time setup:**
 
-1. Run `node .unpack/tools/minify-bookmarklet.js` in your terminal — it prints a `javascript:...` URL
+1. Run `node .unpack/tools/minify-bookmarklet.js chatgpt` or `node .unpack/tools/minify-bookmarklet.js claude` — it prints a `javascript:...` URL
 2. In Chrome: Bookmarks → Bookmark Manager → three-dot menu → "Add new bookmark"
 3. Name it "Export Chat", paste the URL from step 1
 4. (In other browsers: create any bookmark, then edit its URL)
 
-**To export:** Open your ChatGPT conversation, click the bookmark. It copies the full conversation as markdown. Paste into `conversation.md`.
+**To export:** Open your conversation, click the bookmark. It copies the full conversation as markdown. Paste into `conversation.md`.
 
 ### Option 2: Extraction prompt (best for long/messy conversations)
 
