@@ -26,7 +26,8 @@
  */
 
 (function () {
-  var NL = "\\n";
+  var NL = `
+`;
 
   // ── HTML → Markdown conversion ──────────────────────────────────────────
 
@@ -111,6 +112,7 @@
           NL;
       }
       // Inline code (not inside a pre block)
+      // FIX: was broken string — now correctly wraps in backticks
       else if (tag === "CODE") {
         if (!node.closest("pre")) {
           output += "`" + node.textContent + "`";
@@ -310,10 +312,51 @@
 
     if (userMsg) {
       // ── User turn ──
-      // User messages use whitespace-pre-wrap <p> tags that preserve newlines
+
+      // FIX: Capture file/paste attachments (shown above the message text)
+      var attachments = block.querySelectorAll('[data-testid="file-thumbnail"]');
+      var attachmentText = "";
+      if (attachments.length) {
+        attachmentText = Array.from(attachments)
+          .map(function (att) {
+            var name = att.textContent.trim().split("\\n")[0] || "Attachment";
+            return "> 📎 **" + name.substring(0, 80) + "** (attachment)";
+          })
+          .join(NL) + NL + NL;
+      }
+
+      // FIX: Capture image attachments
+      // Find images inside the attachment area (sibling container above the message text)
+      var turnContainer = block.querySelector(".mb-1.mt-6");
+      var imageText = "";
+      if (turnContainer) {
+        var attachmentArea = turnContainer.querySelector(".flex.flex-wrap.justify-end");
+        if (attachmentArea) {
+          var images = attachmentArea.querySelectorAll("img");
+          if (images.length) {
+            imageText = Array.from(images)
+              .map(function (img) {
+                var alt = img.getAttribute("alt") || "image";
+                return "> 🖼️ **" + alt + "** (image attachment)";
+              })
+              .join(NL) + NL + NL;
+          }
+        }
+      }
+
+      // FIX: Use htmlToMarkdown for the full user message to capture
+      // OL, UL, and other structured content — not just p.whitespace-pre-wrap
       var userParagraphs = userMsg.querySelectorAll("p.whitespace-pre-wrap");
       var body;
-      if (userParagraphs.length) {
+
+      // Check if the message has mixed content (lists + paragraphs, etc.)
+      var hasNonParagraphContent = userMsg.querySelector("ol, ul, pre, blockquote, table");
+      if (hasNonParagraphContent) {
+        // Use htmlToMarkdown to properly convert all content types
+        body = htmlToMarkdown(userMsg)
+          .replace(/\\n{3,}/g, NL + NL)
+          .trim();
+      } else if (userParagraphs.length) {
         body = Array.from(userParagraphs)
           .map(function (p) {
             return p.textContent;
@@ -322,42 +365,65 @@
       } else {
         body = userMsg.textContent.trim();
       }
-      parts.push("## You" + NL + NL + body);
+
+      parts.push("## You" + NL + NL + attachmentText + imageText + body);
     } else if (assistantMsg) {
       // ── Assistant turn ──
       var label = "## Claude";
 
-      // Extract thinking summary (collapsible button text)
-      var thinkingBtn = assistantMsg.querySelector(
-        "[class*='row-start-1'] button"
-      );
-      var thinkingSummary = "";
-      if (thinkingBtn) {
-        var btnText = thinkingBtn.textContent.trim();
-        if (btnText) {
-          thinkingSummary =
-            "> **Thinking:** " + btnText + NL + NL;
+      // FIX: Handle multiple "rounds" (thinking → search → thinking → response)
+      // Each round is a direct child div of font-claude-response, containing a grid
+      // with row-start-1 (thinking/tools) and row-start-2 (response text).
+      var rounds = Array.from(assistantMsg.children);
+      var thinkingSummaries = [];
+      var responseTexts = [];
+
+      rounds.forEach(function (round) {
+        var grid = round.querySelector(".grid");
+        if (!grid) return;
+
+        // Extract thinking summary from row-start-1
+        var rowStart1 = grid.querySelector(':scope > [class*="row-start-1"]');
+        if (rowStart1) {
+          // The thinking summary button is the first button in row-start-1
+          var thinkingBtn = rowStart1.querySelector("button");
+          if (thinkingBtn) {
+            var btnText = thinkingBtn.textContent.trim();
+            if (btnText) {
+              thinkingSummaries.push(btnText);
+            }
+          }
         }
+
+        // Extract main response from row-start-2
+        // row-start-2 may itself be a grid with a nested row-start-1 containing the actual content
+        var rowStart2 = grid.querySelector(':scope > [class*="row-start-2"]');
+        if (rowStart2) {
+          var md = rowStart2.querySelector(".standard-markdown");
+          if (md) {
+            var converted = htmlToMarkdown(md)
+              .replace(/\\n{3,}/g, NL + NL)
+              .trim();
+            if (converted) {
+              responseTexts.push(converted);
+            }
+          }
+        }
+      });
+
+      // Build thinking summary block
+      var thinkingSummary = "";
+      if (thinkingSummaries.length) {
+        thinkingSummary = thinkingSummaries
+          .map(function (t) { return "> Thinking: " + t; })
+          .join(NL) + NL + NL;
       }
 
-      // Get main response content from the second row of the grid
-      // (first row is the thinking section)
-      var mainContent = assistantMsg.querySelector(
-        '[class*="row-start-2"] .standard-markdown'
-      );
+      // Combine all response texts from all rounds
+      var body2 = responseTexts.join(NL + NL);
 
-      // Fallback: use the last standard-markdown (for messages without thinking)
-      if (!mainContent) {
-        var allMd = assistantMsg.querySelectorAll(".standard-markdown");
-        mainContent = allMd.length ? allMd[allMd.length - 1] : null;
-      }
-
-      var body2;
-      if (mainContent) {
-        body2 = htmlToMarkdown(mainContent)
-          .replace(/\\n{3,}/g, NL + NL)
-          .trim();
-      } else {
+      // Fallback: if no structured content found, use text content
+      if (!body2) {
         body2 = assistantMsg.textContent.trim();
       }
 
