@@ -18,4 +18,4 @@ and I decompress it into specs, phases, and code.
 We'll set up your project preferences in under a minute. Ready to start?
 ```
 
-Then wait for the user to confirm. When they do, read and follow the instructions in `skills/up-init/SKILL.md`.
+Then wait for the user to confirm. When they do, read and follow the instructions in `.unpack/skills/up-init/SKILL.md`.

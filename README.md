@@ -25,7 +25,7 @@ All `/up-*` commands run inside your AI coding agent (Claude Code, Codex) — no
 2. Research in any AI → save chat as `conversation.md`
 3. `/up-bootstrap` → `/up-next` → build
 
-> **Existing project?** Copy `AGENTS.md`, `CLAUDE.md`, `skills/`, `docs/`, `prompts/`, `standards/` into your repo and run `/up-adopt`.
+> **Existing project?** Copy `AGENTS.md`, `CLAUDE.md`, and `.unpack/` into your repo and run `/up-adopt`.
 
 ## The problem
 
@@ -40,7 +40,7 @@ flowchart LR
     I["/up-init"]
     R(["Research<br/><i>ChatGPT · Claude · Gemini</i>"])
     B["/up-bootstrap"]
-    D[("docs/")]
+    D[(".unpack/docs/")]
     N["/up-next"]
     Q{"Done?"}
     SHIP(["Ship"])
@@ -60,15 +60,15 @@ flowchart LR
 
 ### Step by step
 
-1. **Research freely** — Use any AI to explore your project idea. Any conversation format works — raw ChatGPT exports, meeting notes, brainstorm docs. For best results, paste the [research guide](prompts/research-guide.md) at the start to keep things structured.
+1. **Research freely** — Use any AI to explore your project idea. Any conversation format works — raw ChatGPT exports, meeting notes, brainstorm docs. For best results, paste the [research guide](.unpack/prompts/research-guide.md) at the start to keep things structured.
 
 2. **Drop a conversation** — Save the chat as `conversation.md` at your project root.
 
-3. **Bootstrap** — Run `/up-bootstrap`. The agent reads the conversation, extracts specs, requirements, architecture decisions, and creates a phased build plan. The conversation is archived to `conversations/001-initial-design.md`.
+3. **Bootstrap** — Run `/up-bootstrap`. The agent reads the conversation, extracts specs, requirements, architecture decisions, and creates a phased build plan. The conversation is archived to `.unpack/conversations/001-initial-design.md`.
 
 4. **Build** — Run `/up-next` to execute phases one at a time. Each phase has clear scope, completion criteria, and tests. The agent follows the plan, not vibes.
 
-5. **Iterate** — Need more research? Run `/up-snapshot` to export the current project state as a portable markdown file. Take it to ChatGPT with the [snapshot context](prompts/snapshot-context.md) prompt. When done, save the new conversation as `conversation.md` and run `/up-apply` to patch existing docs.
+5. **Iterate** — Need more research? Run `/up-snapshot` to export the current project state as a portable markdown file. Take it to ChatGPT with the [snapshot context](.unpack/prompts/snapshot-context.md) prompt. When done, save the new conversation as `conversation.md` and run `/up-apply` to patch existing docs.
 
 ## Getting started
 
@@ -77,14 +77,14 @@ flowchart LR
 1. Click **"Use this template"** on GitHub to create your repo
 2. Clone it locally
 3. Run `/up-init` — quick setup: choose your agent, starting point, and preferences. Takes under a minute
-4. Have a research conversation in ChatGPT (use [prompts/research-guide.md](prompts/research-guide.md))
+4. Have a research conversation in ChatGPT (use [.unpack/prompts/research-guide.md](.unpack/prompts/research-guide.md))
 5. Save the chat as `conversation.md` at the project root
 6. Run `/up-bootstrap` to decompress into structured docs and phases
 7. Run `/up-next` to start building
 
 ### Existing project
 
-1. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `skills/`, `docs/`, `prompts/`, `standards/`
+1. Copy these into your repo: `AGENTS.md`, `CLAUDE.md`, `.unpack/`
 2. Run `/up-adopt` — the agent scans your project, generates discovery docs, and creates alignment phases
 3. Run `/up-next` to start improving
 
@@ -98,13 +98,13 @@ git remote add unpack https://github.com/apresmoi/unpack.git
 
 # Fetch and merge only the framework files
 git fetch unpack
-git checkout unpack/main -- skills/ prompts/ standards/ AGENTS.md CLAUDE.md
+git checkout unpack/main -- .unpack/skills/ .unpack/prompts/ .unpack/standards/ .unpack/tools/ AGENTS.md CLAUDE.md
 git add -A && git commit -m "Upgrade Unpack framework"
 ```
 
-**What gets upgraded**: skills (`skills/`), prompts, standards, and agent instructions (`AGENTS.md`). Re-run `/up-init` to redeploy updated skills to your agent.
+**What gets upgraded**: skills, prompts, standards, tools (all under `.unpack/`), and agent instructions (`AGENTS.md`). Re-run `/up-init` to redeploy updated skills to your agent.
 
-**What stays untouched**: your project docs (`docs/`), conversations, README, LICENSE, and any project-specific files.
+**What stays untouched**: your project docs (`.unpack/docs/`), conversations, README, LICENSE, and any project-specific files.
 
 Check the version in `AGENTS.md` (`UNPACK_VERSION` comment) to see what you're running.
 
@@ -141,18 +141,18 @@ Save the conversation as `conversation.md` at your project root. Three methods:
 
 | Method | Best for | How |
 |--------|----------|-----|
-| **Bookmarklet** | ChatGPT conversations | One-time setup: run `node tools/minify-bookmarklet.js`, save the output as a browser bookmark. Then just open the chat and click the bookmark — full conversation copied to clipboard. [Source](tools/chatgpt-export.js) (~200 lines, no network requests). |
-| **Extraction prompt** | Long/messy conversations with many pivots | Paste [`prompts/extract-conversation.md`](prompts/extract-conversation.md) into the conversation. The AI consolidates final decisions, preserves your reasoning, and drops abandoned ideas. Gives `/up-bootstrap` cleaner input. |
+| **Bookmarklet** | ChatGPT conversations | One-time setup: run `node .unpack/tools/minify-bookmarklet.js`, save the output as a browser bookmark. Then just open the chat and click the bookmark — full conversation copied to clipboard. [Source](.unpack/tools/chatgpt-export.js) (~200 lines, no network requests). |
+| **Extraction prompt** | Long/messy conversations with many pivots | Paste [`.unpack/prompts/extract-conversation.md`](.unpack/prompts/extract-conversation.md) into the conversation. The AI consolidates final decisions, preserves your reasoning, and drops abandoned ideas. Gives `/up-bootstrap` cleaner input. |
 | **Copy-paste** | Any AI tool | Select all, copy, paste into `conversation.md`. Messy formatting is fine. |
 
-See the [research guide](prompts/research-guide.md) for detailed setup instructions.
+See the [research guide](.unpack/prompts/research-guide.md) for detailed setup instructions.
 
 ### Conversation versioning
 
 Every conversation is preserved and numbered:
 
 ```
-conversations/
+.unpack/conversations/
   001-initial-design.md
   002-auth-iteration.md
   003-performance-steering.md
@@ -197,7 +197,7 @@ This prevents the agent from drowning in 10,000-line conversations or creating s
 
 Unpack works with:
 
-- **Claude Code** — via `CLAUDE.md` + `skills/` (deployed as slash commands during init)
+- **Claude Code** — via `CLAUDE.md` + `.unpack/skills/` (deployed as slash commands during init)
 - **Codex** — via `AGENTS.md` (reads instructions and follows procedures)
 
 The system is agent-agnostic by design. `AGENTS.md` is the source of truth — any agent that reads markdown instructions can use it.
@@ -206,15 +206,15 @@ The system is agent-agnostic by design. `AGENTS.md` is the source of truth — a
 
 Unpack maintains two separate documentation layers:
 
-- **`docs/`** — Agent docs. The source of truth for AI coding agents. Specs, phases, decisions, and memory.
+- **`.unpack/docs/`** — Agent docs. The source of truth for AI coding agents. Specs, phases, decisions, and memory.
 - **`guide/`** — Human docs. Readable documentation for developers, stakeholders, and users. Optionally powered by [Mintlify](https://mintlify.com).
 
 During `/up-init`, you choose your human docs preferences: whether to enable them, at what level (end-user, technical, or full), and whether to use Mintlify. Run `/up-document` at phase boundaries to generate or update the `guide/`.
 
-### Agent docs (`docs/`)
+### Agent docs (`.unpack/docs/`)
 
 ```
-docs/
+.unpack/docs/
   index.md                  # Navigation hub + phase status table
   _meta/
     workflow.md             # Operating principles
@@ -257,7 +257,7 @@ Not all files are generated — it depends on your configured documentation leve
 
 ## Standards library
 
-Unpack ships with 15 coding standards covering common stacks. Standards are automatically matched to your stack during `/up-bootstrap` or `/up-adopt` and copied into `docs/practices/`. You can also bring your own or have the agent research best practices.
+Unpack ships with 15 coding standards covering common stacks. Standards are automatically matched to your stack during `/up-bootstrap` or `/up-adopt` and copied into `.unpack/docs/practices/`. You can also bring your own or have the agent research best practices.
 
 | Category | Standards |
 |----------|-----------|

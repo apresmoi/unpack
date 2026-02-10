@@ -2,7 +2,7 @@
 
 ## First interaction guard
 
-**Before responding to any message**, check if `docs/_meta/guide-config.md` exists.
+**Before responding to any message**, check if `.unpack/docs/_meta/guide-config.md` exists.
 
 **If it does NOT exist** — the project is not initialized. Do not describe the repo, list contents, explain the workflow, or read README. Respond ONLY with something like:
 
@@ -37,14 +37,14 @@ These slash commands provide ergonomic access to Unpack procedures:
 
 ## Skill deployment
 
-Skills are authored in `skills/` (the canonical source). During `/up-init`, they are deployed to `.claude/skills/` so they appear as slash commands. If skills aren't showing up, ensure they've been deployed — see the "Skill deployment" section in `AGENTS.md`.
+Skills are authored in `.unpack/skills/` (the canonical source). During `/up-init`, they are deployed to `.claude/skills/` so they appear as slash commands. If skills aren't showing up, ensure they've been deployed — see the "Skill deployment" section in `AGENTS.md`.
 
 ## Commit rules
 
 - **Never add `Co-Authored-By` lines.** No AI attribution in commits — ever.
 - Follow the conventional commit types defined in `AGENTS.md`.
-- If autocommit is enabled in `docs/_meta/guide-config.md`, commit automatically after completing each phase.
+- If autocommit is enabled in `.unpack/docs/_meta/guide-config.md`, commit automatically after completing each phase.
 
 ## Standards library
 
-Coding standards live in `standards/` organized by stack. Use `/up-extract-standards` to populate them from example repos. Standards are automatically matched and copied into `docs/practices/` during `/up-bootstrap` or `/up-adopt`.
+Coding standards live in `.unpack/standards/` organized by stack. Use `/up-extract-standards` to populate them from example repos. Standards are automatically matched and copied into `.unpack/docs/practices/` during `/up-bootstrap` or `/up-adopt`.

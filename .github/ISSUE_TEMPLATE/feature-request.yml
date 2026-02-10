@@ -12,7 +12,7 @@ body:
         - New skill idea
         - Standards library (new or improved standard)
         - Prompts (research guide or snapshot context)
-        - Documentation template (docs/ structure)
+        - Documentation template (.unpack/docs/ structure)
         - Onboarding / init flow
         - Upgrade / versioning
         - Other

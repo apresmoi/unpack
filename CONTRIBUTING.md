@@ -4,7 +4,7 @@ Thanks for your interest in improving Unpack. This guide covers the main ways to
 
 ## Adding or improving standards
 
-Standards live in `standards/` organized by category. Each file follows a consistent format:
+Standards live in `.unpack/standards/` organized by category. Each file follows a consistent format:
 
 - **Status line**: `skeleton` → `seeded` → `confirmed`
 - **Metadata**: Applies to, Seeded from
@@ -13,9 +13,9 @@ Standards live in `standards/` organized by category. Each file follows a consis
 
 To add a new standard:
 
-1. Create a `.md` file under the appropriate category folder in `standards/`
-2. Follow the format of existing standards (check any file in `standards/typescript/` for reference)
-3. Add an entry to `standards/_index.md`
+1. Create a `.md` file under the appropriate category folder in `.unpack/standards/`
+2. Follow the format of existing standards (check any file in `.unpack/standards/typescript/` for reference)
+3. Add an entry to `.unpack/standards/_index.md`
 4. Submit a PR with before/after examples showing the patterns in action
 
 To improve an existing standard:
@@ -26,11 +26,11 @@ To improve an existing standard:
 
 ## Adding or improving skills
 
-Skills live in `skills/<name>/SKILL.md` as markdown procedure files with YAML frontmatter (`name` and `description`). Each skill is an instruction set for AI agents.
+Skills live in `.unpack/skills/<name>/SKILL.md` as markdown procedure files with YAML frontmatter (`name` and `description`). Each skill is an instruction set for AI agents.
 
 To add a skill:
 
-1. Create a `skills/<name>/SKILL.md` file with YAML frontmatter and the `up-` prefix naming convention
+1. Create a `.unpack/skills/<name>/SKILL.md` file with YAML frontmatter and the `up-` prefix naming convention
 2. Follow the structure of existing skills: clear input handling, numbered procedure steps, output description
 3. Reference `AGENTS.md` for core procedures where possible (don't duplicate)
 4. Update `CLAUDE.md` to list the new skill
@@ -44,7 +44,7 @@ To improve a skill:
 
 ## Improving prompts
 
-Prompts live in `prompts/`. These are designed to be pasted into ChatGPT or similar tools by end users.
+Prompts live in `.unpack/prompts/`. These are designed to be pasted into ChatGPT or similar tools by end users.
 
 To improve a prompt:
 
@@ -55,7 +55,7 @@ To improve a prompt:
 
 ## Improving the docs template
 
-The `docs/` folder is a template that gets copied into new projects during `/up-init`. Changes here affect every new project initialized with Unpack.
+The `.unpack/docs/` folder is a template that gets copied into new projects during `/up-init`. Changes here affect every new project initialized with Unpack.
 
 Be conservative with template changes — they have wide impact. If you're adding a new spec slot or changing the phase format, explain why in your PR.
 

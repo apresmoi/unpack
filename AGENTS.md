@@ -3,7 +3,7 @@
 <!--
 AGENTS_STATE values:
 - ADOPT: project exists, docs are missing/weak; scan the project and build docs + alignment phases
-- BOOTSTRAP: conversation.md exists; decompress into docs/
+- BOOTSTRAP: conversation.md exists; decompress into .unpack/docs/
 - BUILD: docs + phases exist; execute phases
 -->
 <!-- AGENTS_STATE: BOOTSTRAP -->
@@ -15,9 +15,9 @@ This repository is operated through documentation and phases.
 
 There are two entry modes:
 - **ADOPT** (existing project, no docs yet): scan the project, reverse-engineer docs, and create alignment phases.
-- **BOOTSTRAP** (new project or from reference, `conversation.md` exists): read the conversation, decompress it into `docs/`, and generate phases. If reference code was specified during init, scan it to ground specs in existing patterns.
+- **BOOTSTRAP** (new project or from reference, `conversation.md` exists): read the conversation, decompress it into `.unpack/docs/`, and generate phases. If reference code was specified during init, scan it to ground specs in existing patterns.
 
-After bootstrap or adopt, the agent switches to **BUILD** mode and uses `docs/phases/*` to drive all work.
+After bootstrap or adopt, the agent switches to **BUILD** mode and uses `.unpack/docs/phases/*` to drive all work.
 
 ## Non-negotiable rules
 
@@ -25,28 +25,28 @@ After bootstrap or adopt, the agent switches to **BUILD** mode and uses `docs/ph
 2. **No hidden scope.** Any material change in scope/constraints becomes a **new steering phase**.
 3. **Phases drive work.** Only do work that is in the current phase scope.
 4. **Dependencies matter.** A phase cannot start until all `depends_on` phases are `done`.
-5. **Keep `docs/index.md` current.** It must index all docs + phases + statuses at all times.
+5. **Keep `.unpack/docs/index.md` current.** It must index all docs + phases + statuses at all times.
 6. **Inference labeling.** Anything derived from code without confirmation must be labeled as "inferred".
-7. **Project memory is binding.** The agent must read `docs/_meta/project-memory.md` (if it exists) before planning or executing a phase.
-8. **Decision logging is mandatory.** Any new decision or changed assumption must be recorded (append-only) in `docs/_meta/project-memory.md`, and if stable, promoted to an ADR.
+7. **Project memory is binding.** The agent must read `.unpack/docs/_meta/project-memory.md` (if it exists) before planning or executing a phase.
+8. **Decision logging is mandatory.** Any new decision or changed assumption must be recorded (append-only) in `.unpack/docs/_meta/project-memory.md`, and if stable, promoted to an ADR.
 
 ---
 
 ## Mode detection
 
-- If `docs/_meta/guide-config.md` does not exist → **project not initialized**. Do not enter any mode. Do not list the repo contents or full workflow. Just welcome the user in 2-3 sentences: Unpack turns AI research conversations into structured, buildable projects — you chat freely, drop the conversation here, and the agent turns it into specs, phases, and code. Then offer to run `/up-init` to get started.
+- If `.unpack/docs/_meta/guide-config.md` does not exist → **project not initialized**. Do not enter any mode. Do not list the repo contents or full workflow. Just welcome the user in 2-3 sentences: Unpack turns AI research conversations into structured, buildable projects — you chat freely, drop the conversation here, and the agent turns it into specs, phases, and code. Then offer to run `/up-init` to get started.
 - If `conversation.md` exists at repo root → run **BOOTSTRAP**.
-- Else if `docs/index.md` is missing OR `docs/phases/` is empty → run **ADOPT**.
+- Else if `.unpack/docs/index.md` is missing OR `.unpack/docs/phases/` is empty → run **ADOPT**.
 - Else → run **BUILD**.
 
 ## Skill deployment
 
-Skills are stored in `skills/` at the repo root as the canonical, agent-agnostic source. Each agent discovers skills from its own path:
+Skills are stored in `.unpack/skills/` as the canonical, agent-agnostic source. Each agent discovers skills from its own path:
 
 - **Claude Code**: `.claude/skills/<name>/SKILL.md`
 - **Codex**: `.agents/skills/<name>/SKILL.md`
 
-Before entering any mode, check if skills are deployed to your path. If not, copy each `skills/<name>/SKILL.md` to the corresponding location under your skills directory. This is a one-time operation — after deployment, skills are available as slash commands.
+Before entering any mode, check if skills are deployed to your path. If not, copy each `.unpack/skills/<name>/SKILL.md` to the corresponding location under your skills directory. This is a one-time operation — after deployment, skills are available as slash commands.
 
 During `/up-init`, the user is asked which agent(s) they'll use, and skills are deployed to all selected paths.
 
@@ -60,18 +60,18 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
 
 ### Output required
 
-- `docs/` scaffold with:
-  - `docs/index.md` fully populated
-  - `docs/discovery/*` filled from repo scan
-  - `docs/specs/*` seeded (with "TBD / needs confirmation" where required)
-  - `docs/phases/*` alignment phases with dependencies, criteria, and test plans
-- `docs/_meta/project-memory.md` initialized (if decisions are made during bootstrap)
+- `.unpack/docs/` scaffold with:
+  - `.unpack/docs/index.md` fully populated
+  - `.unpack/docs/discovery/*` filled from repo scan
+  - `.unpack/docs/specs/*` seeded (with "TBD / needs confirmation" where required)
+  - `.unpack/docs/phases/*` alignment phases with dependencies, criteria, and test plans
+- `.unpack/docs/_meta/project-memory.md` initialized (if decisions are made during bootstrap)
 - Switch `AGENTS_STATE` to `BUILD`
 
 ### Steps
 
 1. **Create docs scaffold**
-   - Ensure `docs/_meta`, `docs/discovery`, `docs/specs`, `docs/phases`, `docs/decisions` exist.
+   - Ensure `.unpack/docs/_meta`, `.unpack/docs/discovery`, `.unpack/docs/specs`, `.unpack/docs/phases`, `.unpack/docs/decisions` exist.
    - Create templates if missing.
 
 2. **Repo scan (no refactors yet)**
@@ -83,24 +83,24 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
      - CI configs (or absence)
      - deployment manifests (or absence)
    - Write results into:
-     - `docs/discovery/repo-inventory.md`
-     - `docs/discovery/runtime-and-commands.md`
+     - `.unpack/docs/discovery/repo-inventory.md`
+     - `.unpack/docs/discovery/runtime-and-commands.md`
 
 3. **Inferred architecture + debt**
    - Derive a best-effort component map from folder structure + key files.
    - Label all unverified conclusions as **inferred**.
    - Write into:
-     - `docs/discovery/architecture-inferred.md`
-     - `docs/discovery/risks-and-debt.md`
+     - `.unpack/docs/discovery/architecture-inferred.md`
+     - `.unpack/docs/discovery/risks-and-debt.md`
 
 4. **Seed stable specs**
-   - Populate `docs/specs/*` with what is confidently knowable.
+   - Populate `.unpack/docs/specs/*` with what is confidently knowable.
    - Anything unclear becomes:
      - a "Needs confirmation" section inside the relevant spec, and
      - an "Open question" in the next phase file.
 
 5. **Create alignment phases**
-   - Generate `docs/phases/phase-0.md` as the setup phase and mark it `done` only after docs are generated and indexed.
+   - Generate `.unpack/docs/phases/phase-0.md` as the setup phase and mark it `done` only after docs are generated and indexed.
    - Create a minimal default alignment plan (phase-1+), then tailor it to what the repo scan found.
    - Default alignment phases (tailor based on scan):
      - **phase-1**: Make it runnable (establish "how to run", set minimal env, verify local run path)
@@ -111,7 +111,7 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
    - Each phase must include: `depends_on`, ordered work items, completion criteria, test plan, open questions/blockers.
    - Add `[S: spec-ref]` traceability markers to work items linking them to the spec content they implement (e.g., `[S: 03-architecture#data-layer]`). Omit for pure infrastructure tasks.
 
-6. **Update `docs/index.md`**
+6. **Update `.unpack/docs/index.md`**
    - Index all discovery docs, specs, decisions, and phases.
    - Include a phase status table + next runnable phase.
 
@@ -125,35 +125,35 @@ Create an Unpack-ready documentation system and an **alignment phase plan** that
 
 ### Goal
 
-Read `conversation.md`, extract all design information, decompress it into the structured docs tree under `docs/`, generate phases, archive the conversation, then switch to BUILD.
+Read `conversation.md`, extract all design information, decompress it into the structured docs tree under `.unpack/docs/`, generate phases, archive the conversation, then switch to BUILD.
 
 ### Steps
 
 1. **Read `conversation.md`.**
    - If it is missing or empty:
-     - If `docs/_meta/guide-config.md` does not exist (project not initialized yet), suggest: "Run `/up-init` to set up your project first, then start a research conversation."
-     - Otherwise, guide briefly: "Drop a conversation as `conversation.md` at the project root — ChatGPT exports, meeting notes, any format works. For structured research, start with `prompts/research-guide.md`."
+     - If `.unpack/docs/_meta/guide-config.md` does not exist (project not initialized yet), suggest: "Run `/up-init` to set up your project first, then start a research conversation."
+     - Otherwise, guide briefly: "Drop a conversation as `conversation.md` at the project root — ChatGPT exports, meeting notes, any format works. For structured research, start with `.unpack/prompts/research-guide.md`."
      - Stop and wait for the user.
 
 2. **Ask the user for a conversation name** (e.g., "initial-design", "auth-flow").
 
 3. **Archive the conversation**
-   - Look at existing files in `conversations/` to determine the next number.
-   - Move `conversation.md` to `conversations/NNN-name.md` (e.g., `001-initial-design.md`).
+   - Look at existing files in `.unpack/conversations/` to determine the next number.
+   - Move `conversation.md` to `.unpack/conversations/NNN-name.md` (e.g., `001-initial-design.md`).
 
 4. **Ensure docs tree exists.**
-   - Create any missing folders/files from the scaffold (`docs/_meta`, `docs/specs`, `docs/phases`, `docs/decisions`).
+   - Create any missing folders/files from the scaffold (`.unpack/docs/_meta`, `.unpack/docs/specs`, `.unpack/docs/phases`, `.unpack/docs/decisions`).
 
-5. **Read the unpack map** from `docs/_meta/unpack-map.md` for topic-to-file mapping.
+5. **Read the unpack map** from `.unpack/docs/_meta/unpack-map.md` for topic-to-file mapping.
 
-6. **Extract and write specs** into `docs/specs/*`
+6. **Extract and write specs** into `.unpack/docs/specs/*`
    - Map conversation topics to spec files using the unpack map.
    - Each spec must be self-contained and readable.
    - Link to related specs and relevant phases.
    - Label anything uncertain as "inferred" or "needs confirmation".
    - Do NOT invent requirements not discussed in the conversation.
 
-7. **Extract decisions** into `docs/_meta/project-memory.md`
+7. **Extract decisions** into `.unpack/docs/_meta/project-memory.md`
    - Assign IDs: D-001, D-002, etc.
    - Capture philosophy, constraints, non-negotiables.
    - Tag each as **Explicit** (stated in conversation) or **Inferred** (derived).
@@ -165,7 +165,7 @@ Read `conversation.md`, extract all design information, decompress it into the s
    - Keep phases small (1-3 focused iterations each).
    - Add `[S: spec-ref]` traceability markers to work items linking them to the spec content they implement (e.g., `[S: 02-domain-model#User]`). Omit for pure infrastructure tasks.
 
-9. **Update `docs/index.md`**
+9. **Update `.unpack/docs/index.md`**
    - Index all spec files and phase files.
    - Update the phase status table.
    - Set "Current focus" to the next runnable phase.
@@ -184,9 +184,9 @@ This protocol applies whenever a conversation file is processed (BOOTSTRAP or `/
 
 1. Read the full conversation.
 2. Identify: requirements, architecture, decisions, constraints, open questions, and build plan.
-3. Map topics to docs structure using `docs/_meta/unpack-map.md`.
+3. Map topics to docs structure using `.unpack/docs/_meta/unpack-map.md`.
 4. For each topic area, create or update the corresponding spec file.
-5. Extract decisions into `docs/_meta/project-memory.md` (append-only).
+5. Extract decisions into `.unpack/docs/_meta/project-memory.md` (append-only).
 6. Generate or update phases based on the discussed plan.
 7. Label anything uncertain as "inferred" or "needs confirmation".
 8. Preserve existing content when patching (for `/up-apply`) — do not rewrite unchanged sections.
@@ -217,9 +217,9 @@ Use the **Large Conversation Protocol** — a two-pass triage approach:
 ### Read first (every time)
 
 Before planning or executing any phase, read:
-- `docs/index.md`
-- `docs/_meta/workflow.md`
-- `docs/_meta/project-memory.md` (if it exists)
+- `.unpack/docs/index.md`
+- `.unpack/docs/_meta/workflow.md`
+- `.unpack/docs/_meta/project-memory.md` (if it exists)
 - All phases (or at least the next runnable phase + its dependencies)
 
 ### High-level loop
@@ -237,10 +237,10 @@ Before planning or executing any phase, read:
 5. Run the phase test commands (or explain why not runnable).
 6. Update:
    - phase status + checkboxes + timestamps
-   - `docs/index.md` phase table (keep formatting clean — no duplicate separators, consistent table alignment)
+   - `.unpack/docs/index.md` phase table (keep formatting clean — no duplicate separators, consistent table alignment)
    - any affected specs (if behavior/architecture changed)
    - promote qualifying decisions to ADRs (see Decision management below)
-   - append new decisions to `docs/_meta/project-memory.md`
+   - append new decisions to `.unpack/docs/_meta/project-memory.md`
 
 ### Steering rule (mandatory)
 
@@ -282,13 +282,13 @@ Then:
    - The `## Change log` heading is created once; subsequent steering phases append new `### Phase N` entries under it.
    - During bootstrap there is no change log (it's the initial write).
    - If the change log grows past ~5 entries, offer to consolidate old entries into a brief summary.
-6. Update `docs/index.md`.
-7. Add a decision entry in `docs/_meta/project-memory.md` explaining why the steering exists.
+6. Update `.unpack/docs/index.md`.
+7. Add a decision entry in `.unpack/docs/_meta/project-memory.md` explaining why the steering exists.
 8. When an important decision is accepted, create an ADR and cross-reference the decision ID.
 
 ### Decision management
 
-`project-memory.md` is the quick, append-only log. Every decision goes here first with a `D-NNN` ID. ADRs are the long-term record for decisions that shape the project.
+`.unpack/docs/_meta/project-memory.md` is the quick, append-only log. Every decision goes here first with a `D-NNN` ID. ADRs are the long-term record for decisions that shape the project.
 
 **Promote to ADR** when a decision meets any of these:
 - It affects architecture or system boundaries
@@ -297,7 +297,7 @@ Then:
 - The user explicitly confirms it as stable
 
 **When promoting:**
-1. Create `docs/decisions/adr-NNNN-short-title.md` from the template.
+1. Create `.unpack/docs/decisions/adr-NNNN-short-title.md` from the template.
 2. Cross-reference the decision ID (e.g., `Decision ref: D-007`).
 3. Mark the project-memory entry as `→ Promoted to ADR-NNNN`.
 
@@ -350,7 +350,7 @@ fix: NaN sanitization in speaker embeddings
 
 ## File formatting standards (phases)
 
-Phase files MUST start with YAML front matter and follow the template in `docs/phases/phase-template.md`.
+Phase files MUST start with YAML front matter and follow the template in `.unpack/docs/phases/phase-template.md`.
 
 Allowed `status` values:
 - `planned`
@@ -379,6 +379,6 @@ This allows users to see which version generated each file and helps the agent i
 - Prefer small, atomic edits.
 - Keep docs consistent and non-contradictory.
 - Never mark a phase `done` unless completion criteria are satisfied and tests (if applicable) pass.
-- Decisions in `project-memory.md` have IDs: `D-001`, `D-002`, etc.
+- Decisions in `.unpack/docs/_meta/project-memory.md` have IDs: `D-001`, `D-002`, etc.
 - ADR filenames can include the decision ID or reference it inside.
 - Phases can reference decisions as `Decision refs: D-00X`.

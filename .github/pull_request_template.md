@@ -6,10 +6,10 @@
 
 <!-- Check all that apply -->
 
-- [ ] Skill (`skills/`)
-- [ ] Standard (`standards/`)
-- [ ] Prompt (`prompts/`)
-- [ ] Documentation template (`docs/`)
+- [ ] Skill (`.unpack/skills/`)
+- [ ] Standard (`.unpack/standards/`)
+- [ ] Prompt (`.unpack/prompts/`)
+- [ ] Documentation template (`.unpack/docs/`)
 - [ ] Agent instructions (`AGENTS.md`)
 - [ ] Other
 
