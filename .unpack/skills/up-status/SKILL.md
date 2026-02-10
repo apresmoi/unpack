@@ -3,47 +3,27 @@ name: up-status
 description: Show project progress, phases, blockers, and the next runnable phase
 ---
 
-# Show Unpack project status
+# Show project status
 
-Display the current state of the documentation and phase system.
+Quick read-only summary of where the project stands — mode, phases, blockers, and what's next.
 
-## Procedure
+## What to read
 
-1. **Read `AGENTS.md`** and extract the current `AGENTS_STATE` (ADOPT, BOOTSTRAP, or BUILD).
+- `AGENTS.md` — current `AGENTS_STATE`
+- `.unpack/docs/index.md` — doc index and phase overview
+- `.unpack/docs/phases/phase-*.md` (skip `phase-template.md`) — status, dependencies, blockers
+- `.unpack/conversations/` — how many conversations have been processed
 
-2. **Read `.unpack/docs/index.md`** for the full documentation index and phase status table.
+If `.unpack/docs/index.md` doesn't exist, the project isn't set up yet — point the user to `/up-init` or `/up-adopt` and stop.
 
-3. **Read all phase files** in `.unpack/docs/phases/` (skip `phase-template.md`).
+## What to show
 
-4. **Count conversations** in `.unpack/conversations/` folder.
+Present a clear summary covering:
 
-5. **Output a formatted summary**:
+- **Mode** — ADOPT, BOOTSTRAP, or BUILD
+- **Phases** — each phase with its status and dependencies. A table works well but use whatever's clearest.
+- **Next runnable phase** — the lowest-numbered phase that isn't done/abandoned and whose dependencies are met. If everything's blocked or done, say so.
+- **Blockers** — if any phase is blocked, make the blocking questions prominent. These are the most actionable part of the status.
+- **Docs coverage** — which specs, discovery docs, practices, memory, and ADRs exist. Count what's actually there, don't assume a fixed number.
 
-   ```
-   ## Project Status
-
-   Mode: <current AGENTS_STATE>
-   Conversations processed: <count>
-
-   ### Phases
-   | # | Title | Status | Depends On | Blockers |
-   |---|-------|--------|------------|----------|
-   | ... | ... | ... | ... | ... |
-
-   ### Next runnable phase
-   <phase id + title, or "none — all done" or "blocked — see blockers">
-
-   ### Open questions / blockers
-   - <list from phase files>
-
-   ### Docs coverage
-   - Specs: X/9 populated
-   - Discovery: X/4 populated
-   - Practices: X loaded
-   - Project memory: exists/missing
-   - ADRs: X created
-   ```
-
-6. If any phase is `blocked`, highlight the blocking questions prominently.
-
-7. If `.unpack/docs/index.md` is missing, tell the user the Unpack system isn't set up yet and suggest `/up-init` or `/up-adopt`.
+Keep it scannable. The user wants to glance at this and know what to do next.
