@@ -3,74 +3,54 @@ name: up-adopt
 description: Scan an existing project and create docs + alignment phases
 ---
 
-# Adopt an existing project into the Unpack system
+# Adopt an existing project
 
-You are scanning an existing project and creating documentation + alignment phases to bring it to a healthy state.
+Scan a project that already has code, create Unpack documentation from what you find, and generate phases to bring it to a healthy state. This is read-only — no refactors, no code changes.
 
 ## Input
 
 `$ARGUMENTS` can optionally specify a repo path. If empty, use the current working directory.
 
-## Procedure
+## Project setup
 
-Follow the **ADOPT** procedure defined in `AGENTS.md`:
+First run only — skip if the README already looks project-specific.
 
-0. **Project setup** (first run only — skip if README already looks project-specific):
+Read `.unpack/docs/_meta/guide-config.md` for preferences, then set up the repo scaffolding: replace the template README with a project-specific one, update or delete LICENSE based on the user's choice, delete CONTRIBUTING.md (template file), append stack-appropriate `.gitignore` entries (always include `snapshot.md`, `conversation.md`, `.DS_Store`), and create `guide/` if human docs are enabled.
 
-   Read `.unpack/docs/_meta/guide-config.md` for the user's preferences, then:
+## Scan
 
-   - **README**: Replace with a project-specific one. Use the project/directory name. Include the Unpack commands table and links to `.unpack/docs/` and `guide/`.
-   - **LICENSE**: Update with the chosen license text (current year, ask for copyright holder if needed). If "none", delete it.
-   - **CONTRIBUTING.md**: Delete (template file).
-   - **.gitignore**: Append stack-appropriate entries based on what you detect in the scan. Always include: `snapshot.md`, `conversation.md`, `.DS_Store`, `Thumbs.db`, `*.swp`.
-   - **guide/**: If human docs are enabled, create the directory. If Mintlify is enabled, create a starter `mint.json`.
+Read the repo and write what you find to `.unpack/docs/discovery/`:
 
-   Standards loading happens in step 5 below (after the scan detects the stack).
+- **Inventory** (`repo-inventory.md`) — languages, frameworks, entrypoints, dependency manifests, folder structure
+- **Runtime** (`runtime-and-commands.md`) — how to run, test, lint, typecheck, deploy. Note anything missing.
+- **Architecture** (`architecture-inferred.md`) — component map derived from folder structure and key files. Label everything **inferred**.
+- **Risks** (`risks-and-debt.md`) — gaps, debt, inconsistencies, missing tests or CI
 
-1. **Create the docs scaffold** if missing: `.unpack/docs/_meta`, `.unpack/docs/specs`, `.unpack/docs/phases`, `.unpack/docs/decisions`, `.unpack/docs/discovery`.
+## Seed docs
 
-2. **Scan the repository** (read-only, no refactors):
-   - Languages and frameworks detected
-   - Entrypoints (main binaries, server start points)
-   - Dependency manifests (`package.json`, `pyproject.toml`, `go.mod`, etc.)
-   - Test/lint/typecheck commands (or their absence)
-   - CI configs (or absence)
-   - Deployment manifests (or absence)
-   - Folder structure and organization patterns
-   - Write results to `.unpack/docs/discovery/repo-inventory.md` and `.unpack/docs/discovery/runtime-and-commands.md`
+- **Specs** (`.unpack/docs/specs/*`) — populate with what's confidently knowable from the scan. Mark anything unclear as "Needs confirmation."
+- **Standards** — match the detected stack against `.unpack/standards/`, copy relevant ones to `.unpack/docs/practices/`, and note gaps in the risks doc.
 
-3. **Infer architecture + identify debt**:
-   - Derive a component map from folder structure + key files
-   - Label everything as **inferred**
-   - Write to `.unpack/docs/discovery/architecture-inferred.md` and `.unpack/docs/discovery/risks-and-debt.md`
+## Generate phases
 
-4. **Seed specs** (`.unpack/docs/specs/*`):
-   - Populate with what is confidently knowable from the scan
-   - Mark unclear sections as "Needs confirmation"
-   - Add open questions to phase files
+Create phases in `.unpack/docs/phases/` that form a path from the current state to a healthy project. Typical goals to consider (not a fixed list — tailor to what the scan actually found):
 
-5. **Load relevant standards**:
-   - Based on detected stack, check if `.unpack/docs/practices/` has matching standards loaded
-   - If not, suggest which standards from `.unpack/standards/` should be loaded
-   - Compare repo patterns against loaded standards and note gaps in `.unpack/docs/discovery/risks-and-debt.md`
+- Make it runnable locally (dev setup, env, dependencies)
+- Establish quality gates (lint, format, typecheck)
+- Test coverage + CI
+- Architecture cleanup (boundaries, dead code, dependency direction)
+- Confirm docs (promote inferred → confirmed)
 
-6. **Create alignment phases** (`.unpack/docs/phases/`):
-   - `phase-0`: adoption bootstrap (mark `done` when scan is complete)
-   - `phase-1`: make it runnable (local dev, env setup)
-   - `phase-2`: quality baseline (lint, format, type, unit gates)
-   - `phase-3`: tests + CI
-   - `phase-4`: architecture cleanup (boundaries, dead code, dependency direction)
-   - `phase-5`: docs become truth (confirm inferred → confirmed)
-   - Tailor based on what the scan actually found — skip phases that don't apply, add new ones if needed
+Mark `phase-0` as `done` (the adoption scan itself). Keep phases small — 1-3 focused iterations each. Skip goals that are already met, add new ones if the scan reveals project-specific needs.
 
-7. **Update `.unpack/docs/index.md`** with all discovery docs, specs, phases, and status table.
+## Wrap up
 
-8. **Switch `AGENTS.md`** state to `BUILD`.
-
-9. **Ask the user** about anything critical that code can't reveal (business intent, deployment targets, security constraints). Record answers.
+- Update `.unpack/docs/index.md` with all discovery docs, specs, phases, and status
+- Switch `AGENTS_STATE` in `AGENTS.md` to `BUILD`
+- Ask the user about anything code can't reveal — business intent, deployment targets, security constraints. Record answers in project memory.
+- Report what you found and what phases you created
 
 ## Important
 
-- Do NOT refactor anything during this process
-- Label all conclusions as "inferred" until the user confirms them
-- The goal is docs + a plan, not code changes
+- This is docs + a plan, not code changes. Don't refactor anything.
+- Label all conclusions as **inferred** until the user confirms them.
